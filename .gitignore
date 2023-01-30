@@ -72,3 +72,11 @@ Plugins/*/Intermediate/*
 
 # Cache files for the editor to use
 DerivedDataCache/*
+
+# # # # # # # # # # # 
+#  GGJ2023 EXTRAS   #
+# # # # # # # # # # # 
+
+JSON/*
+Content/__ExternalActors__/*
+Content/__ExternalObjects__/*
