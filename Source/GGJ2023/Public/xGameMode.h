@@ -19,5 +19,9 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	int PlayerCount;
+
+	//UFUNCTION(BlueprintCallable)
+	//bool RequestPlayerJoin();
+
 };	
 

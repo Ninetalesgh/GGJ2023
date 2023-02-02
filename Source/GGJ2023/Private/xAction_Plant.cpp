@@ -35,12 +35,13 @@ void UxAction_Plant::StartAction_Implementation(AActor* InstigatorActor)
 	}
 }
 
-
 void UxAction_Plant::ActionDelay_Elapsed(AxCharacter* InstigatorCharacter)
 {
 	//TODO fetch AI follower here and plant it in the ground in front of player
 	if (InstigatorCharacter->Follower)
-	InstigatorCharacter->Follower->SetActorTransform(InstigatorCharacter->GetActorTransform());
+	{
+		InstigatorCharacter->Follower->SetActorTransform(InstigatorCharacter->GetActorTransform());
+	}
 
 	StopAction(InstigatorCharacter);
 }

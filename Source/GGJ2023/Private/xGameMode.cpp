@@ -10,12 +10,10 @@ AxGameMode::AxGameMode()
 	//SlotName = "SaveGame01";
 }
 
-
 void AxGameMode::StartPlay()
 {
 	Super::StartPlay();
 }
-
 
 void AxGameMode::HandleStartingNewPlayer_Implementation(APlayerController* NewPlayer)
 {

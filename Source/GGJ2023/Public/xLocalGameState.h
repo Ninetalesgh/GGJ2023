@@ -14,4 +14,7 @@ class GGJ2023_API AxLocalGameState : public AGameStateBase
 {
 	GENERATED_BODY()
 	
+public:
+	virtual void BeginPlay() override;
+
 };
