@@ -16,4 +16,7 @@ class GGJ2023_API AxPlayerState : public APlayerState
 public:
 
 	AxPlayerState();
+
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	int PlayerIndex;
 };

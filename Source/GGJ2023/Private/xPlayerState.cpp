@@ -2,8 +2,10 @@
 
 
 #include "xPlayerState.h"
+#include "Net/UnrealNetwork.h"
 
 AxPlayerState::AxPlayerState()
 {
-
+	PlayerIndex = -1;
 }
+

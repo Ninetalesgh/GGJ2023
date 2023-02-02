@@ -16,11 +16,11 @@ class GGJ2023_API AxPlayerController : public APlayerController
 
 protected:
 
-	UPROPERTY(EditDefaultsOnly, Category = "UI")
-	TSubclassOf<UUserWidget> PauseMenuClass;
+	//UPROPERTY(EditDefaultsOnly, Category = "UI")
+	//TSubclassOf<UUserWidget> PauseMenuClass;
 
-	UPROPERTY()
-	UUserWidget* PauseMenuInstance;
+	//UPROPERTY()
+	//UUserWidget* PauseMenuInstance;
 
 	UFUNCTION(BlueprintCallable)
 	void TogglePauseMenu();
