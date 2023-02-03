@@ -2,22 +2,23 @@
 
 
 #include "xAICharacter.h"
+#include "xCharacter.h"
 
-
+#include "xSeedlingStateComponent.h"
+#include "xActionComponent.h"
 #include "AIController.h"
 #include "BehaviorTree/BlackboardComponent.h"
-#include "xAttributeComponent.h"
-#include "xActionComponent.h"
-
 #include "Components/SkeletalMeshComponent.h"
+
 //#include "GameFramework/CharacterMovementComponent.h"
 
 // Sets default values
 AxAICharacter::AxAICharacter()
 {
-	AttributeComp = CreateDefaultSubobject<UxAttributeComponent>("AttributeComp");
+	//AttributeComp = CreateDefaultSubobject<UxAttributeComponent>("AttributeComp");
 	ActionComp = CreateDefaultSubobject<UxActionComponent>("ActionComp");
-
+	SeedlingStateComp = CreateDefaultSubobject<UxSeedlingStateComponent>("SeedlingStateComp");
+	
 	GetMesh()->SetGenerateOverlapEvents(true);
 
 }
@@ -48,3 +49,4 @@ void AxAICharacter::SetTargetActor(AActor* NewTarget)
 		AIController->GetBlackboardComponent()->SetValueAsObject("TargetActor", NewTarget);
 	}
 }
+

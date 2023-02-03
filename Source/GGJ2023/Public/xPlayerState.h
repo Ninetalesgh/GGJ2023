@@ -6,9 +6,8 @@
 #include "GameFramework/PlayerState.h"
 #include "xPlayerState.generated.h"
 
-/**
- * 
- */
+class AxAICharacter;
+
 UCLASS()
 class GGJ2023_API AxPlayerState : public APlayerState
 {
@@ -18,5 +17,6 @@ public:
 	AxPlayerState();
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
-	int PlayerIndex;
+	TArray<AxAICharacter*> Seedlings;
+
 };

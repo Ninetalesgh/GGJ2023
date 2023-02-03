@@ -3,7 +3,6 @@
 
 #include "xCharacter.h"
 #include "xActionComponent.h"
-#include "xAttributeComponent.h"
 #include "xPlayerController.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Components/InputComponent.h"
@@ -14,10 +13,9 @@
 
 AxCharacter::AxCharacter()
 {
-	AttributeComp = CreateDefaultSubobject<UxAttributeComponent>("AttributeComp");
 	ActionComp = CreateDefaultSubobject<UxActionComponent>("ActionComp");
-	HatComp= CreateDefaultSubobject<UBillboardComponent>("HatComp");
-	BodyComp= CreateDefaultSubobject<UBillboardComponent>("BodyComp");
+	HatComp = CreateDefaultSubobject<UBillboardComponent>("HatComp");
+	BodyComp = CreateDefaultSubobject<UBillboardComponent>("BodyComp");
 
 	bUseControllerRotationYaw = false;
 	GetCharacterMovement()->bOrientRotationToMovement = true;

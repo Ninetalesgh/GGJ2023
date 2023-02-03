@@ -8,8 +8,12 @@
 
 class UxActionComponent;
 class UxAttributeComponent;
+class AxCharacter;
+class UxSeedlingStateComponent;
+
 //class UUserWidget;
 //class UxWorldUserWidget;
+
 
 UCLASS()
 class GGJ2023_API AxAICharacter : public ACharacter
@@ -25,6 +29,8 @@ public:
 
 protected:
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+	UxSeedlingStateComponent* SeedlingStateComp;
 	//UxWorldUserWidget* ActiveWorldWidget;
 
 	//UPROPERTY(EditDefaultsOnly, Category = "UI")
@@ -33,8 +39,8 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	UxActionComponent* ActionComp;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
-	UxAttributeComponent* AttributeComp;
+	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+	//UxAttributeComponent* AttributeComp;
 
 	virtual void BeginPlay() override;
 };

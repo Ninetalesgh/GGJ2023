@@ -39,9 +39,6 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	UxActionComponent* ActionComp;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
-	UxAttributeComponent* AttributeComp;
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Visuals")
 	UBillboardComponent* HatComp;
 
