@@ -2,8 +2,6 @@
 
 
 #include "xPlayerController.h"
-
-
 #include "Blueprint/UserWidget.h"
 
 
@@ -13,8 +11,8 @@ void AxPlayerController::BeginPlayingState()
 	//BlueprintBeginPlayingState();
 }
 
-void AxPlayerController::TogglePauseMenu()
-{
+//void AxPlayerController::TogglePauseMenu()
+//{
 	//if (PauseMenuInstance && PauseMenuInstance->IsInViewport())
 	//{
 	//	PauseMenuInstance->RemoveFromParent();
@@ -34,7 +32,7 @@ void AxPlayerController::TogglePauseMenu()
 	//	bShowMouseCursor = true;
 	//	SetInputMode(FInputModeUIOnly());
 	//}
-}
+//}
 
 void AxPlayerController::SetupInputComponent()
 {

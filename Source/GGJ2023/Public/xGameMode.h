@@ -23,5 +23,7 @@ public:
 	//UFUNCTION(BlueprintCallable)
 	//bool RequestPlayerJoin();
 
+	//void RequestPlayerJoin()
+
 };	
 

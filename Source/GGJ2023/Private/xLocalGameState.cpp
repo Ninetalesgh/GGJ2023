@@ -5,24 +5,53 @@
 #include "GenericPlatform/GenericPlatformInputDeviceMapper.h"
 #include "xGameMode.h"
 #include "Engine/World.h"
+#include "../GGJ2023.h"
+#include "Kismet/GameplayStatics.h"
+#include "xPlayerController.h"
 
 void AxLocalGameState::BeginPlay()
 {
 	Super::BeginPlay();
-	TArray<FInputDeviceId> Devices;
+	TArray<FInputDeviceId> ConnectedDevices;
 	
-	IPlatformInputDeviceMapper::Get().GetAllConnectedInputDevices(Devices);
+	IPlatformInputDeviceMapper::Get().GetAllConnectedInputDevices(ConnectedDevices);
 
-	IPlatformInputDeviceMapper::Get().GetOnInputDeviceConnectionChange().AddLambda([this](EInputDeviceConnectionState NewConnectionState, FPlatformUserId PlatformUserId, FInputDeviceId InputDeviceId)
-		{	
-			int test = 0;
-			auto* GM = GetWorld()->GetAuthGameMode<AxGameMode>();
+	for (auto id : ConnectedDevices)
+	{
+		if (!HasAuthority())
+		{
+			LogOnScreen(this, FString::Printf(L"Connected Device -> ID: %d", id.GetId()), FColor::White);
 
-			UE_LOG(LogTemp, Log, L"input devices: ");
-		
+			ULocalPlayer* LocalPlayer = GetWorld()->GetGameInstance()->FindLocalPlayerFromPlatformUserId(FGenericPlatformMisc::GetPlatformUserForUserIndex(id.GetId()));
+
+			if (LocalPlayer == nullptr)
+			{
+				APlayerController* NewPlayer = UGameplayStatics::CreatePlayer(this, id.GetId(), true);
+			}
+		}
+	}
+
+	InputDeviceChangedDelegate = IPlatformInputDeviceMapper::Get().GetOnInputDeviceConnectionChange().AddLambda([this](EInputDeviceConnectionState NewConnectionState, FPlatformUserId PlatformUserId, FInputDeviceId InputDeviceId)
+		{
+			if (!HasAuthority())
+			{
+				FString ConnectState = NewConnectionState == EInputDeviceConnectionState::Connected ? "Connected" :
+					NewConnectionState == EInputDeviceConnectionState::Disconnected ? "Disconnected" : "Invalid";
+
+				ULocalPlayer* LocalPlayer = GetWorld()->GetGameInstance()->FindLocalPlayerFromPlatformUserId(PlatformUserId);
+
+				if (LocalPlayer == nullptr)
+				{
+					APlayerController* NewPlayer = UGameplayStatics::CreatePlayer(this, PlatformUserId.GetInternalId(), true);
+				}
+
+				LogOnScreen(this, FString::Printf(L"%s Device -> ID: %d", *ConnectState, InputDeviceId.GetId()), FColor::White);
+			}
 		});
-
-	UE_LOG(LogTemp, Log, L"input devices: ");
-
 }
 
+void AxLocalGameState::BeginDestroy()
+{
+	IPlatformInputDeviceMapper::Get().GetOnInputDeviceConnectionChange().Remove(InputDeviceChangedDelegate);
+	Super::BeginDestroy();
+}

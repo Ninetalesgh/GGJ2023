@@ -24,5 +24,39 @@ void AxGameMode::HandleStartingNewPlayer_Implementation(APlayerController* NewPl
 		//PS->LoadPlayerState(CurrentSaveGame);
 	}
 
-	Super::HandleStartingNewPlayer_Implementation(NewPlayer);
+	if (NewPlayer == nullptr || NewPlayer->IsPendingKillPending())
+	{
+		return;
+	}
+
+	AActor* StartSpot = FindPlayerStart(NewPlayer);
+	FRotator SpawnRotation = StartSpot->GetActorRotation();
+
+	if (NewPlayer->GetPawn() != nullptr)
+	{
+	}
+	else if (GetDefaultPawnClassForController(NewPlayer) != nullptr)
+	{
+		// Try to create a pawn to use of the default class for this player
+		APawn* NewPawn = SpawnDefaultPawnFor(NewPlayer, StartSpot);
+		if (IsValid(NewPawn))
+		{
+			NewPlayer->SetPawn(NewPawn);	
+		}
+	}
+
+	if (!IsValid(NewPlayer->GetPawn()))
+	{
+		FailedToRestartPlayer(NewPlayer);
+	}
+	else
+	{
+		// Tell the start spot it was used
+		InitStartSpot(StartSpot, NewPlayer);
+
+		//This possesses the pawn
+		FinishRestartPlayer(NewPlayer, SpawnRotation);
+	}
+
+	//Super::HandleStartingNewPlayer_Implementation(NewPlayer);
 }

@@ -22,8 +22,8 @@ protected:
 	//UPROPERTY()
 	//UUserWidget* PauseMenuInstance;
 
-	UFUNCTION(BlueprintCallable)
-	void TogglePauseMenu();
+	//UFUNCTION(BlueprintCallable)
+	//void TogglePauseMenu();
 
 	virtual void SetupInputComponent() override;
 

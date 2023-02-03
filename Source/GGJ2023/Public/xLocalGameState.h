@@ -6,9 +6,8 @@
 #include "GameFramework/GameStateBase.h"
 #include "xLocalGameState.generated.h"
 
-/**
- * 
- */
+class APlayerController;
+
 UCLASS()
 class GGJ2023_API AxLocalGameState : public AGameStateBase
 {
@@ -16,5 +15,7 @@ class GGJ2023_API AxLocalGameState : public AGameStateBase
 	
 public:
 	virtual void BeginPlay() override;
+	virtual void BeginDestroy() override;
 
+	FDelegateHandle InputDeviceChangedDelegate;
 };
