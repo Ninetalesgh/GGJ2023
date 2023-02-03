@@ -7,6 +7,7 @@
 #include "xGameMode.generated.h"
 
 class AxCharacter;
+class AxAICharacter;
 
 UCLASS()
 class GGJ2023_API AxGameMode : public AGameModeBase
@@ -17,13 +18,18 @@ public:
 	virtual void StartPlay() override;
 	virtual void HandleStartingNewPlayer_Implementation(APlayerController* NewPlayer) override;
 
+
+	UPROPERTY(EditAnywhere, Category = "GGJ2023")
+	TSubclassOf<AActor> FollowerClass;
+	
+
+
+
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	int PlayerCount;
 
-	//UFUNCTION(BlueprintCallable)
-	//bool RequestPlayerJoin();
 
-	//void RequestPlayerJoin()
 
 };	
 

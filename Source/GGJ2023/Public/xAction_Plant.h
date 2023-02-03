@@ -22,13 +22,13 @@ public:
 		UxAction_Plant();
 protected:
 
-	UPROPERTY(EditDefaultsOnly, Category = "Attack")
+	UPROPERTY(EditDefaultsOnly, Category = "Action")
 	float ActionAnimDelay;
 
-	UPROPERTY(EditAnywhere, Category = "Attack")
+	UPROPERTY(EditAnywhere, Category = "Action")
 	UAnimMontage* ActionAnimation;
-
-	UPROPERTY(EditAnywhere, Category = "Attack")
+	
+	UPROPERTY(EditAnywhere, Category = "Action")
 	UParticleSystem* ActionEffect;
 
 
