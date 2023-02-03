@@ -3,6 +3,8 @@
 
 #include "xGameMode.h"
 #include "xPlayerState.h"
+#include "xCharacter.h"
+#include "xAICharacter.h"
 
 AxGameMode::AxGameMode()
 {
@@ -43,6 +45,16 @@ void AxGameMode::HandleStartingNewPlayer_Implementation(APlayerController* NewPl
 		{
 			NewPlayer->SetPawn(NewPawn);	
 		}
+
+		auto* Char = Cast<AxCharacter>(NewPawn);
+
+		if (FollowerClass->IsChildOf<AxAICharacter>())
+		{
+			FVector SpawnLocation = Char->GetActorLocation();
+			FActorSpawnParameters SpawnParams;
+			SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+			Char->Follower = Cast<AxAICharacter>(GetWorld()->SpawnActor<AActor>(FollowerClass, SpawnLocation, FRotator::ZeroRotator, SpawnParams));
+		}
 	}
 
 	if (!IsValid(NewPlayer->GetPawn()))
@@ -57,6 +69,9 @@ void AxGameMode::HandleStartingNewPlayer_Implementation(APlayerController* NewPl
 		//This possesses the pawn
 		FinishRestartPlayer(NewPlayer, SpawnRotation);
 	}
+
+
+
 
 	//Super::HandleStartingNewPlayer_Implementation(NewPlayer);
 }
