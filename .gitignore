@@ -80,6 +80,6 @@ JSON/*
 PackagedProject/*
 Platforms/*
 !Binaries/UnrealEditor.modules
-!Binaries/UnrealEditor.target
+!Binaries/GGJ2023Editor.target
 !Binaries/UnrealEditor-GGJ2023.dll
 Binaries/*
