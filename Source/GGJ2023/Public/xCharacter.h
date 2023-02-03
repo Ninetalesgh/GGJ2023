@@ -11,6 +11,7 @@ class UxActionComponent;
 class UxAttributeComponent;
 class UInputMappingContext;
 class UInputAction;
+class UBillboardComponent;
 
 class AxAICharacter;
 
@@ -40,6 +41,13 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	UxAttributeComponent* AttributeComp;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Visuals")
+	UBillboardComponent* HatComp;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Visuals")
+	UBillboardComponent* BodyComp;
+
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;

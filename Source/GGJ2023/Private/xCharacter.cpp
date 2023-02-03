@@ -10,11 +10,14 @@
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
 #include "Engine/LocalPlayer.h"
+#include "Components/BillboardComponent.h"
 
 AxCharacter::AxCharacter()
 {
 	AttributeComp = CreateDefaultSubobject<UxAttributeComponent>("AttributeComp");
 	ActionComp = CreateDefaultSubobject<UxActionComponent>("ActionComp");
+	HatComp= CreateDefaultSubobject<UBillboardComponent>("HatComp");
+	BodyComp= CreateDefaultSubobject<UBillboardComponent>("BodyComp");
 
 	bUseControllerRotationYaw = false;
 	GetCharacterMovement()->bOrientRotationToMovement = true;
