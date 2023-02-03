@@ -46,7 +46,6 @@ SourceArt/**/*.png
 SourceArt/**/*.tga
 
 # Binary Files
-Binaries/*
 Plugins/*/Binaries/*
 
 # Builds
@@ -78,6 +77,9 @@ DerivedDataCache/*
 # # # # # # # # # # # 
 
 JSON/*
-Content/__ExternalActors__/*
-Content/__ExternalObjects__/*
-PackagedProject/
+PackagedProject/*
+Platforms/*
+!Binaries/UnrealEditor.modules
+!Binaries/GGJ2023Editor.target
+!Binaries/UnrealEditor-GGJ2023.dll
+Binaries/*

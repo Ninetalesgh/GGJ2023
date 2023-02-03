@@ -47,7 +47,6 @@ void AxGameMode::HandleStartingNewPlayer_Implementation(APlayerController* NewPl
 		}
 
 		auto* Char = Cast<AxCharacter>(NewPawn);
-
 		if (FollowerClass->IsChildOf<AxAICharacter>())
 		{
 			FVector SpawnLocation = Char->GetActorLocation();

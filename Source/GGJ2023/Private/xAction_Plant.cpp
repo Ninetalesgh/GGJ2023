@@ -5,6 +5,7 @@
 #include "TimerManager.h"
 #include "xCharacter.h"
 #include "xAICharacter.h"
+#include "xSeedlingStateComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Components/SkeletalMeshComponent.h"
@@ -41,6 +42,11 @@ void UxAction_Plant::ActionDelay_Elapsed(AxCharacter* InstigatorCharacter)
 	if (InstigatorCharacter->Follower)
 	{
 		InstigatorCharacter->Follower->SetActorTransform(InstigatorCharacter->GetActorTransform());
+		auto* SeedlingState = Cast<UxSeedlingStateComponent>(InstigatorCharacter->Follower->GetComponentByClass(UxSeedlingStateComponent::StaticClass()));
+		if (ensure(SeedlingState))
+		{
+			SeedlingState->SetOwningPlayer(InstigatorCharacter);
+		}
 	}
 
 	StopAction(InstigatorCharacter);

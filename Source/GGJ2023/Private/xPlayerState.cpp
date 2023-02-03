@@ -6,6 +6,6 @@
 
 AxPlayerState::AxPlayerState()
 {
-	PlayerIndex = -1;
+
 }
 
