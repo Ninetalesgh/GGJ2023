@@ -11,11 +11,13 @@
 #include "EnhancedInputComponent.h"
 #include "Engine/LocalPlayer.h"
 #include "Components/SkeletalMeshComponent.h"
+#include "xFactionComponent.h"
 
 AxCharacter::AxCharacter()
 {
 	ActionComp = CreateDefaultSubobject<UxActionComponent>("ActionComp");
 	BodyComp = CreateDefaultSubobject<UxCameraFacingFlipBookComponent>("BodyComp");
+	FactionComp = CreateDefaultSubobject<UxFactionComponent>("FactionComp");
 	
 	BodyComp->SetupAttachment(RootComponent);
 

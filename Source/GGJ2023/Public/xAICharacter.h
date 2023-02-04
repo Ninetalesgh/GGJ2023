@@ -15,6 +15,7 @@ class UxCameraFacingFlipBookComponent;
 
 //class UUserWidget;
 //class UxWorldUserWidget;
+class UxFactionComponent;
 
 
 UCLASS()
@@ -39,6 +40,8 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	UxSeedlingStateComponent* SeedlingStateComp;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+	UxFactionComponent* FactionComp;
 	//UxWorldUserWidget* ActiveWorldWidget;
 
 	//UPROPERTY(EditDefaultsOnly, Category = "UI")

@@ -6,6 +6,7 @@
 #include "xCameraFacingFlipBookComponent.h"
 #include "xSeedlingStateComponent.h"
 #include "xActionComponent.h"
+#include "xFactionComponent.h"
 
 #include "AIController.h"
 #include "BehaviorTree/BlackboardComponent.h"
@@ -20,6 +21,7 @@ AxAICharacter::AxAICharacter()
 	ActionComp = CreateDefaultSubobject<UxActionComponent>("ActionComp");
 	SeedlingStateComp = CreateDefaultSubobject<UxSeedlingStateComponent>("SeedlingStateComp");
 	BodyComp = CreateDefaultSubobject<UxCameraFacingFlipBookComponent>("BodyComp");
+	FactionComp = CreateDefaultSubobject<UxFactionComponent>("FactionComp");
 
 	BodyComp->SetupAttachment(RootComponent);
 

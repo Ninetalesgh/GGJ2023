@@ -7,6 +7,8 @@
 #include "xPlayerState.h"
 #include "xHexGridTile.generated.h"
 
+class UxFactionComponent;
+
 UCLASS()
 class GGJ2023_API AxHexGridTile : public AActor
 {
@@ -20,28 +22,10 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	UStaticMeshComponent* MeshComp;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+	UxFactionComponent* FactionComp;
+
 	virtual void BeginPlay() override;
 
-public:	
-	UPROPERTY(BlueprintAssignable, Category = "HexTile State")
-		FOnFactionChanged OnFactionChanged;
 
-	UFUNCTION(BlueprintCallable, Category = "HexTile State")
-		void SetFaction(EFaction NewFaction);
-
-	UFUNCTION(BlueprintCallable, Category = "HexTile State")
-		EFaction GetFaction() const;
-
-	UFUNCTION(BlueprintCallable, Category = "HexTile State")
-		EFactionVariation GetFactionVariation() const;
-
-	UFUNCTION(BlueprintCallable, Category = "HexTile State")
-		void SetFactionVariation(EFactionVariation NewVariation);
-
-protected:
-	UPROPERTY(ReplicatedUsing = "OnRep_FactionChange")
-		FFactionRepData RepData;
-
-	UFUNCTION()
-		void OnRep_FactionChange(FFactionRepData OldRepData);
 };
