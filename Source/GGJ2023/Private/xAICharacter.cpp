@@ -26,8 +26,7 @@ AxAICharacter::AxAICharacter()
 // Called when the game starts or when spawned
 void AxAICharacter::BeginPlay()
 {
-	Super::BeginPlay();
-	
+	Super::BeginPlay();	
 }
 
 AActor* AxAICharacter::GetTargetActor()
