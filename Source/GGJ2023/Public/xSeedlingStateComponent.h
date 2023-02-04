@@ -23,31 +23,14 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Seedling State")
 	void SetOwningPlayer(AxCharacter* NewOwner);
-
-	UPROPERTY(BlueprintAssignable, Category = "Seedling State")
+	
+	UPROPERTY(BlueprintAssignable, Category = "HexTile State")
 	FOnOwningPlayerChanged OnOwningPlayerChanged;
 
-	UPROPERTY(BlueprintAssignable, Category = "Seedling State")
-	FOnFactionChanged OnFactionChanged;
-
-	UFUNCTION(BlueprintCallable, Category = "Seedling State")
-	void SetFaction(EFaction NewFaction);
-
-	UFUNCTION(BlueprintCallable, Category = "Seedling State")
-		EFaction GetFaction();
-
-	UFUNCTION(BlueprintCallable, Category = "Seedling State")
-		EFactionVariation GetFactionVariation();
 protected:
 
 	UFUNCTION()
 	void OnRep_OwningPlayerChange(AxCharacter* PreviousOwner);
-	
-	UPROPERTY(ReplicatedUsing = "OnRep_FactionChange")
-	FFactionRepData RepData;
-
-	UFUNCTION()
-	void OnRep_FactionChange(FFactionRepData OldRepData);
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, ReplicatedUsing = "OnRep_OwningPlayerChange", Category = "Seedling Properties")
 	AxCharacter* OwningPlayer;		

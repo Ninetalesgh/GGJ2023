@@ -6,6 +6,7 @@
 #include "xCameraFacingFlipBookComponent.h"
 #include "xSeedlingStateComponent.h"
 #include "xActionComponent.h"
+#include "xFactionComponent.h"
 
 #include "AIController.h"
 #include "BehaviorTree/BlackboardComponent.h"
@@ -19,14 +20,14 @@ AxAICharacter::AxAICharacter()
 	//AttributeComp = CreateDefaultSubobject<UxAttributeComponent>("AttributeComp");
 	ActionComp = CreateDefaultSubobject<UxActionComponent>("ActionComp");
 	SeedlingStateComp = CreateDefaultSubobject<UxSeedlingStateComponent>("SeedlingStateComp");
-	HatComp = CreateDefaultSubobject<UBillboardComponent>("HatComp");
 	BodyComp = CreateDefaultSubobject<UxCameraFacingFlipBookComponent>("BodyComp");
+	FactionComp = CreateDefaultSubobject<UxFactionComponent>("FactionComp");
 
 	BodyComp->SetupAttachment(RootComponent);
-	HatComp->SetupAttachment(BodyComp);
 
 	GetMesh()->SetGenerateOverlapEvents(true);
 
+	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 }
 
 // Called when the game starts or when spawned

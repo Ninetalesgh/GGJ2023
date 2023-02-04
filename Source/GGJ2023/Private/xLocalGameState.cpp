@@ -5,19 +5,15 @@
 #include "GenericPlatform/GenericPlatformInputDeviceMapper.h"
 #include "xGameMode.h"
 #include "Engine/World.h"
+#include "Engine/LocalPlayer.h"
 #include "../GGJ2023.h"
 #include "Kismet/GameplayStatics.h"
 #include "xPlayerController.h"
-#include "Camera/CameraComponent.h"
-#include "Components/SceneComponent.h"
+#include "Camera/CameraActor.h"
+
 
 AxLocalGameState::AxLocalGameState()
 {
-	SceneComp = CreateDefaultSubobject<USceneComponent>("Scene");
-	CameraComp = CreateDefaultSubobject<UCameraComponent>("CameraComp");
-
-	RootComponent = SceneComp;
-	CameraComp->SetupAttachment(SceneComp);
 }
 
 void AxLocalGameState::BeginPlay()
@@ -26,6 +22,24 @@ void AxLocalGameState::BeginPlay()
 	TArray<FInputDeviceId> ConnectedDevices;
 	
 	IPlatformInputDeviceMapper::Get().GetAllConnectedInputDevices(ConnectedDevices);
+
+	//DEFAULT POOP
+	{
+		TArray<AActor*> Cameras;
+		UGameplayStatics::GetAllActorsOfClass(this, ACameraActor::StaticClass(), Cameras);
+
+		if (!Cameras.IsEmpty())
+		{
+			MainCameraLocation = Cameras[0]->GetActorLocation();
+			MainCameraForward = Cameras[0]->GetActorForwardVector();
+
+			ULocalPlayer* LocalPlayer = GetWorld()->GetGameInstance()->FindLocalPlayerFromPlatformUserId(FGenericPlatformMisc::GetPlatformUserForUserIndex(0));
+			if (auto* PC = LocalPlayer->GetPlayerController(GetWorld()))
+			{
+				LocalPlayer->GetPlayerController(GetWorld())->SetViewTarget(Cameras[0]);
+			}
+		}
+	}
 
 	for (auto id : ConnectedDevices)
 	{

@@ -5,44 +5,30 @@
 #include "Net/UnrealNetwork.h"
 #include "GameFramework/PlayerController.h"
 #include "GameFramework/Character.h"
+#include "Kismet/GameplayStatics.h"
 
 AxPlayerState::AxPlayerState()
 {
-	RepData.Faction = Faction_Unassigned;
-	RepData.Variation = FactionVariation_0;
 }
 
-EFaction AxPlayerState::GetFaction()
+AxPlayerState* AxPlayerState::GetPlayerStateFromActor(AActor* FromActor)
 {
-	return RepData.Faction;
-}
-
-EFactionVariation AxPlayerState::GetFactionVariation()
-{
-	return RepData.Variation;
-}
-
-void AxPlayerState::SetFaction(EFaction NewFaction)
-{
-	if (ensure(GetOwner()->HasAuthority()))
+	if (ACharacter* Character = Cast<ACharacter>(FromActor))
 	{
-		auto OldRepData = RepData;
-		RepData.Faction = NewFaction;
-		if (RepData != OldRepData)
-		{
-			OnRep_FactionChange(OldRepData);
-		}
+		return Cast<AxPlayerState>(Character->GetPlayerState());
 	}
+	else if (APlayerController* Controller = Cast<APlayerController>(FromActor))
+	{
+		return Controller->GetPlayerState<AxPlayerState>();
+	}
+	else if (AxPlayerState* State = Cast<AxPlayerState>(FromActor))
+	{
+		return State;
+	}
+	return nullptr;
 }
 
-void AxPlayerState::OnRep_FactionChange(FFactionRepData OldRepData)
+void AxPlayerState::BeginPlay()
 {
-	OnFactionChanged.Broadcast(GetPlayerController()->GetPawn(), RepData.Faction, RepData.Variation, OldRepData.Faction, OldRepData.Variation);
-}
-
-void AxPlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
-{
-	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-
-	DOREPLIFETIME(AxPlayerState, RepData);
+	Super::BeginPlay();
 }

@@ -21,12 +21,12 @@ public:
 	virtual void BeginPlay() override;
 	virtual void BeginDestroy() override;
 
-	FDelegateHandle InputDeviceChangedDelegate;
+	FDelegateHandle InputDeviceChangedDelegate;	
 
-	UPROPERTY(VisibleAnywhere, Category = "Components")
-	UCameraComponent* CameraComp;
+	UPROPERTY(BlueprintReadOnly,VisibleAnywhere, Category="Game State")
+	FVector MainCameraLocation;
 
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Game State")
+	FVector MainCameraForward;
 protected:
-	UPROPERTY(VisibleAnywhere, Category = "Components")
-	USceneComponent* SceneComp;
 };

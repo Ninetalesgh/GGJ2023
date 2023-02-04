@@ -83,3 +83,4 @@ Platforms/*
 !Binaries/GGJ2023Editor.target
 !Binaries/UnrealEditor-GGJ2023.dll
 Binaries/*
+enc_temp_folder/*
