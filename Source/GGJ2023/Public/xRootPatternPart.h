@@ -6,7 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "xRootPatternPart.generated.h"
 
-//class UProceduralMeshComponent;
+class UProceduralMeshComponent;
+class AActor;
 
 UCLASS()
 class GGJ2023_API AxRootPatternPart : public AActor
@@ -14,18 +15,19 @@ class GGJ2023_API AxRootPatternPart : public AActor
 	GENERATED_BODY()
 	
 public:	
-	// Sets default values for this actor's properties
 	AxRootPatternPart();
 
+	UFUNCTION(BlueprintCallable, Category="Root Pattern")
+	void SetShape(TArray<AActor*> Seedlings);
+
 protected:
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Visuals")
-	//UProceduralMeshComponent* ProceduralMeshComp;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Root Pattern")
+	UProceduralMeshComponent* ProceduralMeshComp;
+	
+	UFUNCTION()
+	void OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
 
 };

@@ -7,8 +7,6 @@
 #include "xCameraFacingFlipBookComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Components/InputComponent.h"
-#include "EnhancedInputSubsystems.h"
-#include "EnhancedInputComponent.h"
 #include "Engine/LocalPlayer.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "xFactionComponent.h"

@@ -24,9 +24,14 @@ void UxSeedlingStateComponent::SetOwningPlayer(AxCharacter* NewOwner)
 	}
 }
 
+void UxSeedlingStateComponent::OnRep_SeedlingStateChange(ESeedlingState PreviousState)
+{
+	OnSeedlingStateChanged.Broadcast(Cast<AxAICharacter>(GetOwner()), State,PreviousState);
+}
+
 void UxSeedlingStateComponent::OnRep_OwningPlayerChange(AxCharacter* PreviousOwner)
 {
-	OnOwningPlayerChanged.Broadcast(Cast<AxAICharacter>(GetOwner()), PreviousOwner, OwningPlayer);
+	OnOwningPlayerChanged.Broadcast(Cast<AxAICharacter>(GetOwner()), OwningPlayer, PreviousOwner);
 }
 
 void UxSeedlingStateComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -34,4 +39,5 @@ void UxSeedlingStateComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProper
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(UxSeedlingStateComponent, OwningPlayer);
+	DOREPLIFETIME(UxSeedlingStateComponent, State);
 }
