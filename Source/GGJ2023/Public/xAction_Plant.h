@@ -17,16 +17,12 @@ class GGJ2023_API UxAction_Plant : public UxAction
 	GENERATED_BODY()
 
 public:
-	virtual void StartAction_Implementation(AActor* InstigatorActor) override;
+	virtual void ServerOnlyActionPart_Implementation(AActor* InstigatorActor) override;
 	UxAction_Plant();
 protected:
 
-
-	
 	UPROPERTY(EditAnywhere, Category = "Action")
 	UParticleSystem* ActionEffect;
-
-
 
 	UFUNCTION()
 	void ActionDelay_Elapsed(AxCharacter* InstigatorCharacter);

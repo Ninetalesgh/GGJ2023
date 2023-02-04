@@ -46,6 +46,9 @@ public:
 	UFUNCTION(BlueprintNativeEvent, Category = "Action")
 	bool CanStart(AActor* InstigatorActor);
 
+	UFUNCTION(BlueprintNativeEvent, Category = "Action")
+	void ServerOnlyActionPart(AActor* InstigatorActor);
+
 	UFUNCTION(BlueprintCallable, Category = "Action")
 	bool IsRunning() const;
 

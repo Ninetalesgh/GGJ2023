@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "xFactionComponent.h"
 #include "GameFramework/GameModeBase.h"
 #include "EnvironmentQuery/EnvQueryTypes.h"
 #include "xGameMode.generated.h"
@@ -12,6 +13,7 @@ class AxCharacter;
 class AxAICharacter;
 class UEnvQuery;
 class UEnvQueryInstanceBlueprintWrapper;
+class UCurveFloat;
 
 UCLASS()
 class GGJ2023_API AxGameMode : public AGameModeBase
@@ -27,12 +29,17 @@ public:
 	void DrawSeedlingTriangle(AxCharacter* InstigatorPlayer, TArray<AxAICharacter*> Seedlings);
 	void UprootSeedling(AxAICharacter* Seedling);
 
+	UFUNCTION(BlueprintCallable, Category="GGJ2023")
+	TArray<AxAICharacter*> GetAllSeedlingsOfFaction(EFaction Faction);
+
 	UPROPERTY(EditAnywhere, Category = "GGJ2023")
 	TSubclassOf<AActor> FollowerClass;
 	
 	UPROPERTY(EditAnywhere, Category = "GGJ2023")
 	TSubclassOf<AActor> HexGridTileClass;
 
+	UPROPERTY(EditAnywhere, Category = "GGJ2023")
+	TSubclassOf<AActor> RootPatternPartClass;
 
 	UPROPERTY(EditAnywhere, Category = "GGJ2023")
 	int MaxSeedlingsPerPlayer;
@@ -58,6 +65,7 @@ protected:
 	UFUNCTION()
 	void OnQueryCompleted(UEnvQueryInstanceBlueprintWrapper* QueryInstance, EEnvQueryStatus::Type QueryStatus);
 
-
+	UPROPERTY(EditDefaultsOnly, Category = "AI")
+		UCurveFloat* DifficultyCurve;
 };	
 
