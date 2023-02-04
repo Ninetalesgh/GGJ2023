@@ -12,6 +12,8 @@ AxRootPatternPart::AxRootPatternPart()
 	ProceduralMeshComp = CreateDefaultSubobject<UProceduralMeshComponent>("ProceduralMeshComp");
 	ProceduralMeshComp->SetGenerateOverlapEvents(true);
 	ProceduralMeshComp->SetCollisionResponseToAllChannels(ECR_Overlap);
+
+	SetReplicates(true);
 }
 
 void AxRootPatternPart::BeginPlay()

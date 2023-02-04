@@ -19,6 +19,11 @@ void UxAction::StartAction_Implementation(AActor* InstigatorActor)
 	UE_LOG(LogTemp, Log, L"Started: %s", *GetNameSafe(this));
 	//LogOnScreen(this, FString::Printf(L"Started: %s", *ActionName.ToString()), FColor::Green);
 
+	if (InstigatorActor == nullptr)
+	{
+		InstigatorActor = GetOwningComponent()->GetOwner();
+	}
+
 	GetOwningComponent()->ActiveGameplayTags.AppendTags(GrantsTags);
 	RepData = { true, InstigatorActor };
 
@@ -35,7 +40,7 @@ void UxAction::StartAction_Implementation(AActor* InstigatorActor)
 		Character->PlayAnimMontage(ActionAnimation);
 	}
 
-	if (InstigatorActor->HasAuthority())
+	if (InstigatorActor && InstigatorActor->HasAuthority())
 	{
 		ServerOnlyActionPart(InstigatorActor);
 	}
