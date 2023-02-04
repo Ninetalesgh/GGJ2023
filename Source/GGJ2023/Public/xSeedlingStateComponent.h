@@ -10,7 +10,15 @@
 class AxAICharacter;
 class AxCharacter;
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnOwningPlayerChanged, AxAICharacter*, Seedling, AxCharacter*, PreviousOwningPlayer, AxCharacter*, NewOwningPlayer);
+UENUM(BlueprintType)
+enum ESeedlingState
+{
+	SeedlingState_Planted,
+	SeedlingState_Uprooted,
+};
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnSeedlingStateChanged, AxAICharacter*, Seedling, ESeedlingState, NewSeedlingState, ESeedlingState, OldSeedlingState);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnOwningPlayerChanged, AxAICharacter*, Seedling, AxCharacter*, NewOwningPlayer, AxCharacter*, OldOwningPlayer);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class GGJ2023_API UxSeedlingStateComponent : public UActorComponent
@@ -24,13 +32,22 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Seedling State")
 	void SetOwningPlayer(AxCharacter* NewOwner);
 	
-	UPROPERTY(BlueprintAssignable, Category = "HexTile State")
+	UPROPERTY(BlueprintAssignable, Category = "Seedling State")
 	FOnOwningPlayerChanged OnOwningPlayerChanged;
+
+	UPROPERTY(BlueprintAssignable, Category = "Seedling State")
+	FOnSeedlingStateChanged OnSeedlingStateChanged;
 
 protected:
 
 	UFUNCTION()
 	void OnRep_OwningPlayerChange(AxCharacter* PreviousOwner);
+
+	UFUNCTION()
+	void OnRep_SeedlingStateChange(ESeedlingState PreviousState);
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, ReplicatedUsing = "OnRep_SeedlingStateChange", Category = "Seedling Properties")
+	TEnumAsByte<ESeedlingState> State;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, ReplicatedUsing = "OnRep_OwningPlayerChange", Category = "Seedling Properties")
 	AxCharacter* OwningPlayer;		

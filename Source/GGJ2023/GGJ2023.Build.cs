@@ -8,7 +8,7 @@ public class GGJ2023 : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "UMG", "GameplayTags", "AIModule", "Paper2D", "EnhancedInput" });
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "UMG", "GameplayTags", "AIModule", "Paper2D", "ProceduralMeshComponent" });
 
         PublicDependencyModuleNames.AddRange(new string[] { "ApplicationCore" });
         // Uncomment if you are using Slate UI
