@@ -20,7 +20,7 @@ void UxCameraFacingFlipBookComponent::TickComponent(float DeltaTime, enum ELevel
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	auto* Char = Cast<AxCharacter>(GetOwner());
+	auto* Char = Cast<ACharacter>(GetOwner());
 	auto* Player = GEngine->GetFirstLocalPlayerController(GetWorld());
 		
 	ULocalPlayer* const LP = Player ? Player->GetLocalPlayer() : nullptr;
