@@ -4,10 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
+#include "EnvironmentQuery/EnvQueryTypes.h"
 #include "xGameMode.generated.h"
+
 
 class AxCharacter;
 class AxAICharacter;
+class UEnvQuery;
+class UEnvQueryInstanceBlueprintWrapper;
 
 UCLASS()
 class GGJ2023_API AxGameMode : public AGameModeBase
@@ -29,11 +33,20 @@ public:
 	UPROPERTY(EditAnywhere, Category = "GGJ2023")
 	TSubclassOf<AActor> HexGridTileClass;
 
+protected:
+	FTimerHandle TimerHandle_SpawnSeedlings;
 
+	UPROPERTY(EditDefaultsOnly, Category = "AI")
+	UEnvQuery* SpawnSeedlingQuery;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	int PlayerCount;
+	UPROPERTY(EditDefaultsOnly, Category = "AI")
+	float SpawnTimerInterval;
 
+	UFUNCTION()
+	void SpawnSeedlingsTimerElapsed();
+
+	UFUNCTION()
+	void OnQueryCompleted(UEnvQueryInstanceBlueprintWrapper* QueryInstance, EEnvQueryStatus::Type QueryStatus);
 
 
 };	

@@ -5,6 +5,9 @@
 #include "xPlayerState.h"
 #include "xCharacter.h"
 #include "xAICharacter.h"
+#include "EnvironmentQuery/EnvQueryTypes.h"
+#include "EnvironmentQuery/EnvQueryManager.h"
+
 
 AxGameMode::AxGameMode()
 {
@@ -15,6 +18,9 @@ AxGameMode::AxGameMode()
 void AxGameMode::StartPlay()
 {
 	Super::StartPlay();
+
+	GetWorldTimerManager().SetTimer(TimerHandle_SpawnSeedlings, this, &AxGameMode::SpawnSeedlingsTimerElapsed, SpawnTimerInterval, true);
+
 }
 
 void AxGameMode::GenerateHexGrid()
@@ -76,6 +82,7 @@ void AxGameMode::HandleStartingNewPlayer_Implementation(APlayerController* NewPl
 			FActorSpawnParameters SpawnParams;
 			SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 			Char->Follower = Cast<AxAICharacter>(GetWorld()->SpawnActor<AActor>(FollowerClass, SpawnLocation, FRotator::ZeroRotator, SpawnParams));
+			Char->Follower->SpawnDefaultController();
 		}
 	}
 
@@ -96,4 +103,45 @@ void AxGameMode::HandleStartingNewPlayer_Implementation(APlayerController* NewPl
 
 
 	//Super::HandleStartingNewPlayer_Implementation(NewPlayer);
+}
+
+void AxGameMode::SpawnSeedlingsTimerElapsed()
+{
+	UEnvQueryInstanceBlueprintWrapper* QueryInstance = UEnvQueryManager::RunEQSQuery(this, SpawnSeedlingQuery, this, EEnvQueryRunMode::RandomBest5Pct, nullptr);
+	if (ensure(QueryInstance))
+	{
+		QueryInstance->GetOnQueryFinishedEvent().AddDynamic(this, &AxGameMode::OnQueryCompleted);
+
+	}
+}
+
+void AxGameMode::OnQueryCompleted(UEnvQueryInstanceBlueprintWrapper* QueryInstance, EEnvQueryStatus::Type QueryStatus)
+{
+	if (QueryStatus != EEnvQueryStatus::Success)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Spawn Seedling EQS Query Failed!"));
+		return;
+	}
+
+	/*
+	int32 NrOfUndefinedSeedlings = 0;
+	for (TActorIterator<AxAICharacter> It(GetWorld()); It; ++It)
+	{
+		AxAICharacter* Seedling = It;
+
+		UxAttributeComponent* AttributeComp = Cast<UxActionComponent>(Seedling->GetComponentByClass(UxAttributeComponent::StaticClass()));
+		if (AttributeComp && AttributeComp->IsUndefined())
+		{
+			NrOfUndefinedSeedlings++;
+		}
+	}
+
+	const float MaxSeedlingCount = 20.0f
+	
+	TArray<FVector> Locations = QueryInstance->GetResultsAsLocations();
+
+	if (Locations.Num() > 0)
+	{
+		GetWorld()->SpawnActor<AActor>(FollowerClass, Locations[0], FRotator::ZeroRotator);
+	}*/
 }
