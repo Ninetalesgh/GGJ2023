@@ -35,23 +35,24 @@ void AxAICharacter::BeginPlay()
 	Super::BeginPlay();	
 }
 
-AActor* AxAICharacter::GetTargetActor()
+AxAICharacter* AxAICharacter::GetPrevious()
 {
-	AAIController* AIController = Cast<AAIController>(GetController());
-	if (AIController)
-	{
-		return Cast<AActor>(AIController->GetBlackboardComponent()->GetValueAsObject("TargetActor"));
-	}
-
 	return nullptr;
 }
 
-void AxAICharacter::SetTargetActor(AActor* NewTarget)
+ACharacter* AxAICharacter::GetNext()
 {
-	AAIController* AIController = Cast<AAIController>(GetController());
-	if (AIController)
-	{
-		AIController->GetBlackboardComponent()->SetValueAsObject("TargetActor", NewTarget);
-	}
+	return nullptr;
 }
+
+void AxAICharacter::SetNext(ACharacter* Next)
+{
+
+}
+
+void AxAICharacter::SetPrevious(AxAICharacter* Previous)
+{
+
+}
+
 

@@ -34,6 +34,9 @@ protected:
 
 public:	
 
+	AxAICharacter* GetNextSeedling();
+	AxAICharacter* GetLastSeedling();
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 	AxAICharacter* Follower;
 

@@ -46,6 +46,16 @@ void AxCharacter::Plant()
 	ActionComp->StartActionByName(this, "Plant");
 }
 
+AxAICharacter* AxCharacter::GetNextSeedling()
+{
+	return Follower;
+}
+
+AxAICharacter* AxCharacter::GetLastSeedling()
+{
+	return Follower;
+}
+
 void AxCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
