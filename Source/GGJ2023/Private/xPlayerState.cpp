@@ -8,30 +8,41 @@
 
 AxPlayerState::AxPlayerState()
 {
-	Faction = Faction_Unassigned;
+	RepData.Faction = Faction_Unassigned;
+	RepData.Variation = FactionVariation_0;
+}
+
+EFaction AxPlayerState::GetFaction()
+{
+	return RepData.Faction;
+}
+
+EFactionVariation AxPlayerState::GetFactionVariation()
+{
+	return RepData.Variation;
 }
 
 void AxPlayerState::SetFaction(EFaction NewFaction)
 {
 	if (ensure(GetOwner()->HasAuthority()))
 	{
-		auto PreviousFaction = NewFaction;
-		Faction = NewFaction;
-		if (PreviousFaction != NewFaction)
+		auto OldRepData = RepData;
+		RepData.Faction = NewFaction;
+		if (RepData != OldRepData)
 		{
-			OnRep_FactionChange(PreviousFaction);
+			OnRep_FactionChange(OldRepData);
 		}
 	}
 }
 
-void AxPlayerState::OnRep_FactionChange(EFaction PreviousFaction)
+void AxPlayerState::OnRep_FactionChange(FFactionRepData OldRepData)
 {
-	OnFactionChanged.Broadcast(Cast<ACharacter>(GetPlayerController()->GetPawn()), PreviousFaction, Faction);
+	OnFactionChanged.Broadcast(GetPlayerController()->GetPawn(), RepData.Faction, RepData.Variation, OldRepData.Faction, OldRepData.Variation);
 }
 
 void AxPlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	DOREPLIFETIME(AxPlayerState, Faction);
+	DOREPLIFETIME(AxPlayerState, RepData);
 }
