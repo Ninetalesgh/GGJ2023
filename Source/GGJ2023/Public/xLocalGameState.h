@@ -7,6 +7,8 @@
 #include "xLocalGameState.generated.h"
 
 class APlayerController;
+class UCameraComponent;
+class USceneComponent;
 
 UCLASS()
 class GGJ2023_API AxLocalGameState : public AGameStateBase
@@ -14,8 +16,17 @@ class GGJ2023_API AxLocalGameState : public AGameStateBase
 	GENERATED_BODY()
 	
 public:
+	AxLocalGameState();
+
 	virtual void BeginPlay() override;
 	virtual void BeginDestroy() override;
 
 	FDelegateHandle InputDeviceChangedDelegate;
+
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+	UCameraComponent* CameraComp;
+
+protected:
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+	USceneComponent* SceneComp;
 };

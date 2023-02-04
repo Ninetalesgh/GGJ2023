@@ -11,7 +11,6 @@ class UxActionComponent;
 class UxAttributeComponent;
 class UInputMappingContext;
 class UInputAction;
-class UBillboardComponent;
 class UxCameraFacingFlipBookComponent;
 
 class AxAICharacter;
@@ -42,9 +41,6 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	UxActionComponent* ActionComp;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Visuals")
-	UBillboardComponent* HatComp;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Visuals")
 	UxCameraFacingFlipBookComponent* BodyComp;

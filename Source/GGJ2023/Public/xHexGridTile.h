@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "xPlayerState.h"
 #include "xHexGridTile.generated.h"
 
 UCLASS()
@@ -19,11 +20,25 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	UStaticMeshComponent* MeshComp;
 
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+	UPROPERTY(BlueprintAssignable, Category = "HexTile State")
+		FOnFactionChanged OnFactionChanged;
 
+	UFUNCTION(BlueprintCallable, Category = "HexTile State")
+		void SetFaction(EFaction NewFaction);
+
+	UFUNCTION(BlueprintCallable, Category = "HexTile State")
+		EFaction GetFaction();
+
+	UFUNCTION(BlueprintCallable, Category = "HexTile State")
+		EFactionVariation GetFactionVariation();
+
+protected:
+	UPROPERTY(ReplicatedUsing = "OnRep_FactionChange")
+		FFactionRepData RepData;
+
+	UFUNCTION()
+		void OnRep_FactionChange(FFactionRepData OldRepData);
 };

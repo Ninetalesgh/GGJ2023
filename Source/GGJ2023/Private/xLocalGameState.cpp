@@ -8,6 +8,17 @@
 #include "../GGJ2023.h"
 #include "Kismet/GameplayStatics.h"
 #include "xPlayerController.h"
+#include "Camera/CameraComponent.h"
+#include "Components/SceneComponent.h"
+
+AxLocalGameState::AxLocalGameState()
+{
+	SceneComp = CreateDefaultSubobject<USceneComponent>("Scene");
+	CameraComp = CreateDefaultSubobject<UCameraComponent>("CameraComp");
+
+	RootComponent = SceneComp;
+	CameraComp->SetupAttachment(SceneComp);
+}
 
 void AxLocalGameState::BeginPlay()
 {

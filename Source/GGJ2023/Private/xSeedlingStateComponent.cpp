@@ -8,6 +8,8 @@
 
 UxSeedlingStateComponent::UxSeedlingStateComponent()
 {
+	RepData.Faction = Faction_Unassigned;
+	RepData.Variation = FactionVariation_0;
 	SetIsReplicatedByDefault(true);
 }
 
@@ -29,22 +31,34 @@ void UxSeedlingStateComponent::OnRep_OwningPlayerChange(AxCharacter* PreviousOwn
 	OnOwningPlayerChanged.Broadcast(Cast<AxAICharacter>(GetOwner()), PreviousOwner, OwningPlayer);
 }
 
+
+
+EFaction UxSeedlingStateComponent::GetFaction()
+{
+	return RepData.Faction;
+}
+
+EFactionVariation UxSeedlingStateComponent::GetFactionVariation()
+{
+	return RepData.Variation;
+}
+
 void UxSeedlingStateComponent::SetFaction(EFaction NewFaction)
 {
 	if (ensure(GetOwner()->HasAuthority()))
 	{
-		auto PreviousFaction = NewFaction;
-		Faction = NewFaction;
-		if (PreviousFaction != NewFaction)
+		auto OldRepData = RepData;
+		RepData.Faction = NewFaction;
+		if (RepData != OldRepData)
 		{
-			OnRep_FactionChange(PreviousFaction);
+			OnRep_FactionChange(OldRepData);
 		}
 	}
 }
 
-void UxSeedlingStateComponent::OnRep_FactionChange(EFaction PreviousFaction)
+void UxSeedlingStateComponent::OnRep_FactionChange(FFactionRepData OldRepData)
 {
-	OnFactionChanged.Broadcast(Cast<ACharacter>(GetOwner()), PreviousFaction, Faction);
+	OnFactionChanged.Broadcast(GetOwner(), RepData.Faction, RepData.Variation, OldRepData.Faction, OldRepData.Variation);
 }
 
 void UxSeedlingStateComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -52,5 +66,5 @@ void UxSeedlingStateComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProper
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(UxSeedlingStateComponent, OwningPlayer);
-	DOREPLIFETIME(UxSeedlingStateComponent, Faction);
+	DOREPLIFETIME(UxSeedlingStateComponent, RepData);
 }
