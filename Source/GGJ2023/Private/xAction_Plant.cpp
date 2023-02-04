@@ -9,6 +9,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Components/SkeletalMeshComponent.h"
+#include "Camera/CameraActor.h"
 
 UxAction_Plant::UxAction_Plant()
 {
@@ -23,6 +24,8 @@ void UxAction_Plant::ServerOnlyActionPart_Implementation(AActor* InstigatorActor
 	if (Character)
 	{
 		//UGameplayStatics::SpawnEmitterAttached(ActionEffect, Character->GetMesh(),HandSocketName, FVector::ZeroVector, FRotator::ZeroRotator, EAttachLocation::SnapToTarget);
+		Character->PlayAnimMontage(ActionAnimation);
+		
 
 		FTimerHandle TimerHandle_ActionDelay;
 		FTimerDelegate Delegate = FTimerDelegate::CreateUObject(this, &UxAction_Plant::ActionDelay_Elapsed, Character);
@@ -33,6 +36,19 @@ void UxAction_Plant::ServerOnlyActionPart_Implementation(AActor* InstigatorActor
 
 void UxAction_Plant::ActionDelay_Elapsed(AxCharacter* InstigatorCharacter)
 {
+	auto* Root = Cast<AxRootPatternPart>(GetWorld()->SpawnActor<AActor>(RootPatternPartClass, InstigatorCharacter->GetActorLocation() + FVector(500,0,200), FRotator::ZeroRotator));
+
+	//TArray<AActor*> beep;
+
+	//TArray<AActor*> Cameras;
+	//UGameplayStatics::GetAllActorsOfClass(this, ACameraActor::StaticClass(), Cameras);
+
+
+	/*beep.Add(Cameras[0]);
+	beep.Add(InstigatorCharacter);
+	beep.Add(InstigatorCharacter->Follower);
+
+	Root->SetShape(beep);*/
 
 	//TODO fetch AI follower here and plant it in the ground in front of player
 	if (InstigatorCharacter->Follower)

@@ -11,7 +11,6 @@
 void UxAction::Initialize(UxActionComponent* NewActionComp)
 {
 	ActionComp = NewActionComp;
-	ActionAnimDelay = 0.0f;
 }
 
 void UxAction::StartAction_Implementation(AActor* InstigatorActor)
@@ -34,11 +33,7 @@ void UxAction::StartAction_Implementation(AActor* InstigatorActor)
 		TimeStarted = GetWorld()->TimeSeconds;
 	}
 
-	ACharacter* Character = Cast<ACharacter>(InstigatorActor);
-	if (Character)
-	{
-		Character->PlayAnimMontage(ActionAnimation);
-	}
+
 
 	if (InstigatorActor->HasAuthority())
 	{

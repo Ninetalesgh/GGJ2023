@@ -8,7 +8,6 @@
 #include "xAction.generated.h"
 
 class UxActionComponent;
-class UAnimMontage;
 
 USTRUCT()
 struct FActionRepData
@@ -58,11 +57,8 @@ public:
 	virtual bool IsSupportedForNetworking() const override { return true; }
 protected:
 
-	UPROPERTY(EditDefaultsOnly, Category = "Action")
-	float ActionAnimDelay;
 
-	UPROPERTY(EditAnywhere, Category = "Action")
-	UAnimMontage* ActionAnimation;
+
 
 	//UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "UI")
 	//TSoftObjectPtr<UTexture2D> Icon;
