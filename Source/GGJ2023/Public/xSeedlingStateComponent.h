@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "xPlayerState.h"
 #include "xSeedlingStateComponent.generated.h"
 
 class AxAICharacter;
@@ -20,19 +21,28 @@ public:
 	// Sets default values for this component's properties
 	UxSeedlingStateComponent();
 
+	UFUNCTION(BlueprintCallable, Category = "Seedling State")
 	void SetOwningPlayer(AxCharacter* NewOwner);
 
-	UPROPERTY(BlueprintAssignable, Category = "Seedling")
+	UPROPERTY(BlueprintAssignable, Category = "Seedling State")
 	FOnOwningPlayerChanged OnOwningPlayerChanged;
 
+	UPROPERTY(BlueprintAssignable, Category = "Seedling State")
+	FOnFactionChanged OnFactionChanged;
+
+	UFUNCTION(BlueprintCallable, Category = "Seedling State")
+	void SetFaction(EFaction NewFaction);
+
 protected:
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = "OnRep_FactionChange", Category = "Seedling State")
+	TEnumAsByte<EFaction> Faction;
 
 	UFUNCTION()
-	void OnRep_OwningPlayer(AxCharacter* PreviousOwner);
+	void OnRep_OwningPlayerChange(AxCharacter* PreviousOwner);
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, ReplicatedUsing = "OnRep_OwningPlayer", Category = "Seedling")
-	AxCharacter* OwningPlayer;
+	UFUNCTION()
+	void OnRep_FactionChange(EFaction PreviousFaction);
 
-
-		
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, ReplicatedUsing = "OnRep_OwningPlayerChange", Category = "Seedling Properties")
+	AxCharacter* OwningPlayer;		
 };

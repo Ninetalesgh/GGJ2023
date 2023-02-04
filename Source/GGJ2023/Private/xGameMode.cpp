@@ -17,6 +17,27 @@ void AxGameMode::StartPlay()
 	Super::StartPlay();
 }
 
+void AxGameMode::GenerateHexGrid()
+{
+
+}
+
+void AxGameMode::DrawSeedlingTriangle(AxCharacter* InstigatorPlayer, TArray<AxAICharacter*> Seedlings)
+{
+	//TODO set states on all hexes in triangle
+
+
+}
+
+void AxGameMode::UprootSeedling(AxAICharacter* Seedling)
+{
+	//destroy triangle without destroying overlapping ones?
+	// 
+	//uproot all seedlings that are now alone?
+}
+
+
+
 void AxGameMode::HandleStartingNewPlayer_Implementation(APlayerController* NewPlayer)
 {
 	AxPlayerState* PS = NewPlayer->GetPlayerState<AxPlayerState>();

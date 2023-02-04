@@ -6,10 +6,12 @@
 #include "Components/ActorComponent.h"
 #include "Engine/Engine.h"
 #include "Net/UnrealNetwork.h"
+#include "GameFramework/Character.h"
 
 void UxAction::Initialize(UxActionComponent* NewActionComp)
 {
 	ActionComp = NewActionComp;
+	ActionAnimDelay = 0.0f;
 }
 
 void UxAction::StartAction_Implementation(AActor* InstigatorActor)
@@ -26,6 +28,9 @@ void UxAction::StartAction_Implementation(AActor* InstigatorActor)
 	{
 		TimeStarted = GetWorld()->TimeSeconds;
 	}
+
+	ACharacter* Character = Cast<ACharacter>(InstigatorActor);
+	Character->PlayAnimMontage(ActionAnimation);
 }
 
 void UxAction::StopAction_Implementation(AActor* InstigatorActor)
@@ -45,7 +50,6 @@ bool UxAction::CanStart_Implementation(AActor* InstigatorActor)
 {
 	return !IsRunning() && !GetOwningComponent()->ActiveGameplayTags.HasAny(BlockedTags);
 }
-
 
 UWorld* UxAction::GetWorld() const
 {

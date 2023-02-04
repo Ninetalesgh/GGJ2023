@@ -18,11 +18,16 @@ public:
 	virtual void StartPlay() override;
 	virtual void HandleStartingNewPlayer_Implementation(APlayerController* NewPlayer) override;
 
+	void GenerateHexGrid();
+
+	void DrawSeedlingTriangle(AxCharacter* InstigatorPlayer, TArray<AxAICharacter*> Seedlings);
+	void UprootSeedling(AxAICharacter* Seedling);
 
 	UPROPERTY(EditAnywhere, Category = "GGJ2023")
 	TSubclassOf<AActor> FollowerClass;
 	
-
+	UPROPERTY(EditAnywhere, Category = "GGJ2023")
+	TSubclassOf<AActor> HexGridTileClass;
 
 
 
