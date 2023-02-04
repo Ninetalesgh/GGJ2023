@@ -5,6 +5,7 @@
 #include "Net/UnrealNetwork.h"
 #include "GameFramework/PlayerController.h"
 #include "GameFramework/Character.h"
+#include "Kismet/GameplayStatics.h"
 
 AxPlayerState::AxPlayerState()
 {
@@ -12,19 +13,36 @@ AxPlayerState::AxPlayerState()
 	RepData.Variation = FactionVariation_0;
 }
 
-EFaction AxPlayerState::GetFaction()
+AxPlayerState* AxPlayerState::GetPlayerStateFromActor(AActor* FromActor)
+{
+	if (ACharacter* Character = Cast<ACharacter>(FromActor))
+	{
+		return Cast<AxPlayerState>(Character->GetPlayerState());
+	}
+	else if (APlayerController* Controller = Cast<APlayerController>(FromActor))
+	{
+		return Controller->GetPlayerState<AxPlayerState>();
+	}
+	else if (AxPlayerState* State = Cast<AxPlayerState>(FromActor))
+	{
+		return State;
+	}
+	return nullptr;
+}
+
+EFaction AxPlayerState::GetFaction() const
 {
 	return RepData.Faction;
 }
 
-EFactionVariation AxPlayerState::GetFactionVariation()
+EFactionVariation AxPlayerState::GetFactionVariation() const
 {
 	return RepData.Variation;
 }
 
 void AxPlayerState::SetFaction(EFaction NewFaction)
 {
-	if (ensure(GetOwner()->HasAuthority()))
+	if (GetOwner()->HasAuthority())
 	{
 		auto OldRepData = RepData;
 		RepData.Faction = NewFaction;
@@ -35,9 +53,22 @@ void AxPlayerState::SetFaction(EFaction NewFaction)
 	}
 }
 
+void AxPlayerState::SetFactionVariation(EFactionVariation NewVariation)
+{
+	if (GetOwner()->HasAuthority())
+	{
+		auto OldRepData = RepData;
+		RepData.Variation = NewVariation;
+		if (RepData != OldRepData)
+		{
+			OnRep_FactionChange(OldRepData);
+		}
+	}
+}
+
 void AxPlayerState::OnRep_FactionChange(FFactionRepData OldRepData)
 {
-	OnFactionChanged.Broadcast(GetPlayerController()->GetPawn(), RepData.Faction, RepData.Variation, OldRepData.Faction, OldRepData.Variation);
+	OnFactionChanged.Broadcast(this, RepData.Faction, RepData.Variation, OldRepData.Faction, OldRepData.Variation);
 }
 
 void AxPlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const

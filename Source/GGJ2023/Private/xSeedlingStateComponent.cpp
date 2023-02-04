@@ -31,24 +31,35 @@ void UxSeedlingStateComponent::OnRep_OwningPlayerChange(AxCharacter* PreviousOwn
 	OnOwningPlayerChanged.Broadcast(Cast<AxAICharacter>(GetOwner()), PreviousOwner, OwningPlayer);
 }
 
-
-
-EFaction UxSeedlingStateComponent::GetFaction()
+EFaction UxSeedlingStateComponent::GetFaction() const
 {
 	return RepData.Faction;
 }
 
-EFactionVariation UxSeedlingStateComponent::GetFactionVariation()
+EFactionVariation UxSeedlingStateComponent::GetFactionVariation() const
 {
 	return RepData.Variation;
 }
 
 void UxSeedlingStateComponent::SetFaction(EFaction NewFaction)
 {
-	if (ensure(GetOwner()->HasAuthority()))
+	if (GetOwner()->HasAuthority())
 	{
 		auto OldRepData = RepData;
 		RepData.Faction = NewFaction;
+		if (RepData != OldRepData)
+		{
+			OnRep_FactionChange(OldRepData);
+		}
+	}
+}
+
+void UxSeedlingStateComponent::SetFactionVariation(EFactionVariation NewVariation)
+{
+	if (GetOwner()->HasAuthority())
+	{
+		auto OldRepData = RepData;
+		RepData.Variation = NewVariation;
 		if (RepData != OldRepData)
 		{
 			OnRep_FactionChange(OldRepData);

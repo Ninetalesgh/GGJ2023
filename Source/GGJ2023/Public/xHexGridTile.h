@@ -30,10 +30,13 @@ public:
 		void SetFaction(EFaction NewFaction);
 
 	UFUNCTION(BlueprintCallable, Category = "HexTile State")
-		EFaction GetFaction();
+		EFaction GetFaction() const;
 
 	UFUNCTION(BlueprintCallable, Category = "HexTile State")
-		EFactionVariation GetFactionVariation();
+		EFactionVariation GetFactionVariation() const;
+
+	UFUNCTION(BlueprintCallable, Category = "HexTile State")
+		void SetFactionVariation(EFactionVariation NewVariation);
 
 protected:
 	UPROPERTY(ReplicatedUsing = "OnRep_FactionChange")

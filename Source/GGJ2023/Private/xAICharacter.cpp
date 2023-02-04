@@ -19,11 +19,9 @@ AxAICharacter::AxAICharacter()
 	//AttributeComp = CreateDefaultSubobject<UxAttributeComponent>("AttributeComp");
 	ActionComp = CreateDefaultSubobject<UxActionComponent>("ActionComp");
 	SeedlingStateComp = CreateDefaultSubobject<UxSeedlingStateComponent>("SeedlingStateComp");
-	HatComp = CreateDefaultSubobject<UBillboardComponent>("HatComp");
 	BodyComp = CreateDefaultSubobject<UxCameraFacingFlipBookComponent>("BodyComp");
 
 	BodyComp->SetupAttachment(RootComponent);
-	HatComp->SetupAttachment(BodyComp);
 
 	GetMesh()->SetGenerateOverlapEvents(true);
 

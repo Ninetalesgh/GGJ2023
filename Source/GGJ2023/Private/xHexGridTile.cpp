@@ -22,12 +22,12 @@ void AxHexGridTile::BeginPlay()
 	
 }
 
-EFaction AxHexGridTile::GetFaction()
+EFaction AxHexGridTile::GetFaction() const
 {
 	return RepData.Faction;
 }
 
-EFactionVariation AxHexGridTile::GetFactionVariation()
+EFactionVariation AxHexGridTile::GetFactionVariation() const
 {
 	return RepData.Variation;
 }
@@ -38,6 +38,19 @@ void AxHexGridTile::SetFaction(EFaction NewFaction)
 	{
 		auto OldRepData = RepData;
 		RepData.Faction = NewFaction;
+		if (RepData != OldRepData)
+		{
+			OnRep_FactionChange(OldRepData);
+		}
+	}
+}
+
+void AxHexGridTile::SetFactionVariation(EFactionVariation NewVariation)
+{
+	if (ensure(GetOwner()->HasAuthority()))
+	{
+		auto OldRepData = RepData;
+		RepData.Variation = NewVariation;
 		if (RepData != OldRepData)
 		{
 			OnRep_FactionChange(OldRepData);

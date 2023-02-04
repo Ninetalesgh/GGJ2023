@@ -34,10 +34,14 @@ public:
 	void SetFaction(EFaction NewFaction);
 
 	UFUNCTION(BlueprintCallable, Category = "Seedling State")
-		EFaction GetFaction();
+	EFaction GetFaction() const;
 
 	UFUNCTION(BlueprintCallable, Category = "Seedling State")
-		EFactionVariation GetFactionVariation();
+	EFactionVariation GetFactionVariation() const;
+
+	UFUNCTION(BlueprintCallable, Category = "Seedling State")
+	void SetFactionVariation(EFactionVariation NewVariation);
+
 protected:
 
 	UFUNCTION()

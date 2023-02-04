@@ -55,6 +55,9 @@ public:
 
 	AxPlayerState();
 
+	UFUNCTION(BlueprintPure, Category = "Credits")
+	static AxPlayerState* GetPlayerStateFromActor(AActor* FromActor);
+
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
 	TArray<AxAICharacter*> PlantedSeedlings;
 
@@ -65,10 +68,13 @@ public:
 	void SetFaction(EFaction NewFaction);
 
 	UFUNCTION(BlueprintCallable, Category = "Player State")
-	EFaction GetFaction();
+	EFaction GetFaction() const;
 
 	UFUNCTION(BlueprintCallable, Category = "Player State")
-	EFactionVariation GetFactionVariation();
+	EFactionVariation GetFactionVariation() const;
+
+	UFUNCTION(BlueprintCallable, Category = "Player State")
+	void SetFactionVariation(EFactionVariation NewVariation);
 
 protected:
 	UPROPERTY(ReplicatedUsing="OnRep_FactionChange")
