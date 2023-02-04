@@ -37,7 +37,7 @@ void AxPlayerState::SetFaction(EFaction NewFaction)
 
 void AxPlayerState::OnRep_FactionChange(FFactionRepData OldRepData)
 {
-	OnFactionChanged.Broadcast(Cast<ACharacter>(GetPlayerController()->GetPawn()), RepData.Faction, RepData.Variation, OldRepData.Faction, OldRepData.Variation);
+	OnFactionChanged.Broadcast(GetPlayerController()->GetPawn(), RepData.Faction, RepData.Variation, OldRepData.Faction, OldRepData.Variation);
 }
 
 void AxPlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const

@@ -58,7 +58,7 @@ void UxSeedlingStateComponent::SetFaction(EFaction NewFaction)
 
 void UxSeedlingStateComponent::OnRep_FactionChange(FFactionRepData OldRepData)
 {
-	OnFactionChanged.Broadcast(Cast<ACharacter>(GetOwner()), RepData.Faction, RepData.Variation, OldRepData.Faction, OldRepData.Variation);
+	OnFactionChanged.Broadcast(GetOwner(), RepData.Faction, RepData.Variation, OldRepData.Faction, OldRepData.Variation);
 }
 
 void UxSeedlingStateComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const

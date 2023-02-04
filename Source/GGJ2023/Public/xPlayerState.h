@@ -45,7 +45,7 @@ public:
 };
 
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_FiveParams(FOnFactionChanged, ACharacter*, Character, EFaction, NewFaction, EFactionVariation, NewVariation, EFaction, OldFaction, EFactionVariation, OldVariation);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_FiveParams(FOnFactionChanged, AActor*, Instigator, EFaction, NewFaction, EFactionVariation, NewVariation, EFaction, OldFaction, EFactionVariation, OldVariation);
 
 UCLASS()
 class GGJ2023_API AxPlayerState : public APlayerState

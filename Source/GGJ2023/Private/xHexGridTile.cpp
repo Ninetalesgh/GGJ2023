@@ -3,28 +3,56 @@
 
 #include "xHexGridTile.h"
 #include "Components/StaticMeshComponent.h"
+#include "Net/UnrealNetwork.h"
 
 // Sets default values
 AxHexGridTile::AxHexGridTile()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
-
+ 	PrimaryActorTick.bCanEverTick = false;
 	MeshComp = CreateDefaultSubobject<UStaticMeshComponent>("MeshComp");
 	SetReplicates(true);
+
+	RepData.Faction = Faction_Unassigned;
+	RepData.Variation = FactionVariation_0;
 }
 
-// Called when the game starts or when spawned
 void AxHexGridTile::BeginPlay()
 {
 	Super::BeginPlay();
 	
 }
 
-// Called every frame
-void AxHexGridTile::Tick(float DeltaTime)
+EFaction AxHexGridTile::GetFaction()
 {
-	Super::Tick(DeltaTime);
-
+	return RepData.Faction;
 }
 
+EFactionVariation AxHexGridTile::GetFactionVariation()
+{
+	return RepData.Variation;
+}
+
+void AxHexGridTile::SetFaction(EFaction NewFaction)
+{
+	if (ensure(GetOwner()->HasAuthority()))
+	{
+		auto OldRepData = RepData;
+		RepData.Faction = NewFaction;
+		if (RepData != OldRepData)
+		{
+			OnRep_FactionChange(OldRepData);
+		}
+	}
+}
+
+void AxHexGridTile::OnRep_FactionChange(FFactionRepData OldRepData)
+{
+	OnFactionChanged.Broadcast(this, RepData.Faction, RepData.Variation, OldRepData.Faction, OldRepData.Variation);
+}
+
+void AxHexGridTile::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(AxHexGridTile, RepData);
+}
