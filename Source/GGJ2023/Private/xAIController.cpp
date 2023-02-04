@@ -16,4 +16,14 @@ void AxAIController::BeginPlay()
 	}
 
 	//TODO set movement targets for ai
+
+	APawn* MyPawn = UGameplayStatics::GetPlayerPawn(this, 0);
+
+	if (MyPawn)
+	{
+		//GetBlackboardComponent()->SetValueAsVector("MoveToLocation", MyPawn->GetActorLocation());
+
+		GetBlackboardComponent()->SetValueAsObject("TargetActor", MyPawn);
+	}
+
 }
