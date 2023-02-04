@@ -7,6 +7,7 @@
 #include "xAICharacter.h"
 #include "EnvironmentQuery/EnvQueryTypes.h"
 #include "EnvironmentQuery/EnvQueryManager.h"
+#include "TimerManager.h"
 
 
 AxGameMode::AxGameMode()

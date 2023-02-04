@@ -33,6 +33,16 @@ public:
 	UPROPERTY(EditAnywhere, Category = "GGJ2023")
 	TSubclassOf<AActor> HexGridTileClass;
 
+
+	UPROPERTY(EditAnywhere, Category = "GGJ2023")
+	int MaxSeedlingsPerPlayer;
+
+	UPROPERTY(EditAnywhere, Category = "GGJ2023")
+	int MaxSeedlingsTotal;
+
+	UPROPERTY(EditAnywhere, Category = "GGJ2023")
+	int MaxUnassignedSeedlings;
+
 protected:
 	FTimerHandle TimerHandle_SpawnSeedlings;
 
