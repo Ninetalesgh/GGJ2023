@@ -140,15 +140,14 @@ void AxGameMode::OnQueryCompleted(UEnvQueryInstanceBlueprintWrapper* QueryInstan
 		}
 	}
 
-	float MaxSeedlingCount = 30.0f;
-		if (NrOfUndefinedSeedlings >= MaxSeedlingCount)
-		{
-			return;
-		}
+	if (NrOfUndefinedSeedlings >= MaxUnassignedSeedlings)
+	{
+		return;
+	}
 	
 	if (DifficultyCurve)
 	{
-		MaxSeedlingCount = DifficultyCurve->GetFloatValue(GetWorld()->TimeSeconds);
+		//MaxSeedlingsTotal = DifficultyCurve->GetFloatValue(GetWorld()->TimeSeconds);
 	}
 
 	TArray<FVector> Locations = QueryInstance->GetResultsAsLocations();
