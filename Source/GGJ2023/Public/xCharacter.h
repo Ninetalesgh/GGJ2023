@@ -12,7 +12,7 @@ class UxAttributeComponent;
 class UInputMappingContext;
 class UInputAction;
 class UxCameraFacingFlipBookComponent;
-
+class UxFactionComponent;
 class AxAICharacter;
 
 UCLASS()
@@ -44,6 +44,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Visuals")
 	UxCameraFacingFlipBookComponent* BodyComp;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+	UxFactionComponent* FactionComp;
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;

@@ -4,6 +4,7 @@
 #include "xCameraFacingFlipBookComponent.h"
 #include "xCharacter.h"
 #include "xPlayerController.h"
+#include "xLocalGameState.h"
 #include "xAICharacter.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
@@ -13,6 +14,7 @@
 
 UxCameraFacingFlipBookComponent::UxCameraFacingFlipBookComponent()
 {
+	PrimaryComponentTick.bAllowTickOnDedicatedServer = false;
 	SetComponentTickEnabled(true);	
 }
 
@@ -21,26 +23,21 @@ void UxCameraFacingFlipBookComponent::TickComponent(float DeltaTime, enum ELevel
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	auto* Char = Cast<ACharacter>(GetOwner());
-	auto* Player = GEngine->GetFirstLocalPlayerController(GetWorld());
 		
-	auto* GS = GetWorld()->GetGameState();
-
-	ULocalPlayer* const LP = Player ? Player->GetLocalPlayer() : nullptr;
-	if (LP && LP->ViewportClient)
+	auto* GS = Cast<AxLocalGameState>(GetWorld()->GetGameState());
+	if (GS)
 	{
-		FSceneViewProjectionData ProjectionData;
-		if (LP->GetProjectionData(LP->ViewportClient->Viewport, /*out*/ ProjectionData))
-		{
-			FColor LineColor = FColor::Green;
-			DrawDebugLine(GetWorld(), ProjectionData.ViewOrigin, Char->GetActorLocation(), LineColor, false, 0.0f, 0, 2.0f);
-			
-			FVector Rot = Char->GetActorLocation() - ProjectionData.ViewOrigin;
-			Rot.Z = 0.0f;
+		FVector CamLoc = GS->MainCameraLocation;
+		FVector CamForward = GS->MainCameraForward;
 
-			FRotator Rotor = UKismetMathLibrary::MakeRotFromX(Rot);
-			Rotor.Yaw = 90 + Rotor.Yaw;
+		FVector Rot = Char->GetActorLocation() - CamLoc;
 
-			SetWorldRotation(FQuat::MakeFromRotator(Rotor));
-		}
+		FRotator Rotor = UKismetMathLibrary::MakeRotFromX(-CamForward);
+		Rotor.Roll = Rotor.Pitch;
+		Rotor.Pitch = 0;
+		Rotor.Yaw = 90 + Rotor.Yaw;
+
+		SetWorldRotation(FQuat::MakeFromRotator(Rotor));
+
 	}
 }
