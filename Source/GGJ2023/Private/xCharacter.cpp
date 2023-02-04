@@ -10,17 +10,14 @@
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
 #include "Engine/LocalPlayer.h"
-#include "Components/BillboardComponent.h"
 #include "Components/SkeletalMeshComponent.h"
 
 AxCharacter::AxCharacter()
 {
 	ActionComp = CreateDefaultSubobject<UxActionComponent>("ActionComp");
-	HatComp = CreateDefaultSubobject<UBillboardComponent>("HatComp");
 	BodyComp = CreateDefaultSubobject<UxCameraFacingFlipBookComponent>("BodyComp");
 	
 	BodyComp->SetupAttachment(RootComponent);
-	HatComp->SetupAttachment(BodyComp);
 
 	bUseControllerRotationYaw = false;
 	GetCharacterMovement()->bOrientRotationToMovement = true;

@@ -23,6 +23,8 @@ void UxCameraFacingFlipBookComponent::TickComponent(float DeltaTime, enum ELevel
 	auto* Char = Cast<ACharacter>(GetOwner());
 	auto* Player = GEngine->GetFirstLocalPlayerController(GetWorld());
 		
+	auto* GS = GetWorld()->GetGameState();
+
 	ULocalPlayer* const LP = Player ? Player->GetLocalPlayer() : nullptr;
 	if (LP && LP->ViewportClient)
 	{

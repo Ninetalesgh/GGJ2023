@@ -55,6 +55,8 @@ void AxGameMode::HandleStartingNewPlayer_Implementation(APlayerController* NewPl
 	AActor* StartSpot = FindPlayerStart(NewPlayer);
 	FRotator SpawnRotation = StartSpot->GetActorRotation();
 
+	
+
 	if (NewPlayer->GetPawn() != nullptr)
 	{
 	}
