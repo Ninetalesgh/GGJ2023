@@ -20,11 +20,8 @@ void UxAction_Plant::StartAction_Implementation(AActor* InstigatorActor)
 	Super::StartAction_Implementation(InstigatorActor);
 
 	AxCharacter* Character = Cast<AxCharacter>(InstigatorActor);
-
 	if (Character)
 	{
-		Character->PlayAnimMontage(ActionAnimation);
-
 		//UGameplayStatics::SpawnEmitterAttached(ActionEffect, Character->GetMesh(),HandSocketName, FVector::ZeroVector, FRotator::ZeroRotator, EAttachLocation::SnapToTarget);
 
 		if (Character->HasAuthority())

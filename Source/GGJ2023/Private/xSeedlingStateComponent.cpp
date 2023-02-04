@@ -13,19 +13,38 @@ UxSeedlingStateComponent::UxSeedlingStateComponent()
 
 void UxSeedlingStateComponent::SetOwningPlayer(AxCharacter* NewOwner)
 {
-	ensure(GetOwner()->HasAuthority());
-	
-	auto* PreviousOwner = OwningPlayer;
-	OwningPlayer = NewOwner;
-	if (PreviousOwner != NewOwner)
+	if (ensure(GetOwner()->HasAuthority()))
 	{
-		OnRep_OwningPlayer(PreviousOwner);
+		auto* PreviousOwner = OwningPlayer;
+		OwningPlayer = NewOwner;
+		if (PreviousOwner != NewOwner)
+		{
+			OnRep_OwningPlayerChange(PreviousOwner);
+		}
 	}
 }
 
-void UxSeedlingStateComponent::OnRep_OwningPlayer(AxCharacter* PreviousOwner)
+void UxSeedlingStateComponent::OnRep_OwningPlayerChange(AxCharacter* PreviousOwner)
 {
 	OnOwningPlayerChanged.Broadcast(Cast<AxAICharacter>(GetOwner()), PreviousOwner, OwningPlayer);
+}
+
+void UxSeedlingStateComponent::SetFaction(EFaction NewFaction)
+{
+	if (ensure(GetOwner()->HasAuthority()))
+	{
+		auto PreviousFaction = NewFaction;
+		Faction = NewFaction;
+		if (PreviousFaction != NewFaction)
+		{
+			OnRep_FactionChange(PreviousFaction);
+		}
+	}
+}
+
+void UxSeedlingStateComponent::OnRep_FactionChange(EFaction PreviousFaction)
+{
+	OnFactionChanged.Broadcast(Cast<ACharacter>(GetOwner()), PreviousFaction, Faction);
 }
 
 void UxSeedlingStateComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -33,4 +52,5 @@ void UxSeedlingStateComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProper
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(UxSeedlingStateComponent, OwningPlayer);
+	DOREPLIFETIME(UxSeedlingStateComponent, Faction);
 }

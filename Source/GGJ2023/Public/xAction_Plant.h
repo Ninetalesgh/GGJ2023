@@ -7,7 +7,6 @@
 #include "xAction_Plant.generated.h"
 
 
-class UAnimMontage;
 class AxCharacter;
 class UParticleSystem;
 
@@ -18,15 +17,11 @@ class GGJ2023_API UxAction_Plant : public UxAction
 	GENERATED_BODY()
 
 public:
-		virtual void StartAction_Implementation(AActor* InstigatorActor) override;
-		UxAction_Plant();
+	virtual void StartAction_Implementation(AActor* InstigatorActor) override;
+	UxAction_Plant();
 protected:
 
-	UPROPERTY(EditDefaultsOnly, Category = "Action")
-	float ActionAnimDelay;
 
-	UPROPERTY(EditAnywhere, Category = "Action")
-	UAnimMontage* ActionAnimation;
 	
 	UPROPERTY(EditAnywhere, Category = "Action")
 	UParticleSystem* ActionEffect;
