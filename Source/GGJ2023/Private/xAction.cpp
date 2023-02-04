@@ -30,7 +30,19 @@ void UxAction::StartAction_Implementation(AActor* InstigatorActor)
 	}
 
 	ACharacter* Character = Cast<ACharacter>(InstigatorActor);
-	Character->PlayAnimMontage(ActionAnimation);
+	if (Character)
+	{
+		Character->PlayAnimMontage(ActionAnimation);
+	}
+
+	if (InstigatorActor->HasAuthority())
+	{
+		ServerOnlyActionPart(InstigatorActor);
+	}
+}
+
+void UxAction::ServerOnlyActionPart_Implementation(AActor* InstigatorActor)
+{
 }
 
 void UxAction::StopAction_Implementation(AActor* InstigatorActor)

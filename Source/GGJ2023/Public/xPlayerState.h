@@ -20,7 +20,7 @@ public:
 	static AxPlayerState* GetPlayerStateFromActor(AActor* FromActor);
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
-	TArray<AxAICharacter*> PlantedSeedlings;
+	TArray<AxAICharacter*> Seedlings;
 
 protected:
 

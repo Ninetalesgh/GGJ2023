@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "xFactionComponent.h"
 #include "GameFramework/GameModeBase.h"
 #include "EnvironmentQuery/EnvQueryTypes.h"
 #include "xGameMode.generated.h"
@@ -28,11 +29,17 @@ public:
 	void DrawSeedlingTriangle(AxCharacter* InstigatorPlayer, TArray<AxAICharacter*> Seedlings);
 	void UprootSeedling(AxAICharacter* Seedling);
 
+	UFUNCTION(BlueprintCallable, Category="GGJ2023")
+	TArray<AxAICharacter*> GetAllSeedlingsOfFaction(EFaction Faction);
+
 	UPROPERTY(EditAnywhere, Category = "GGJ2023")
 	TSubclassOf<AActor> FollowerClass;
 	
 	UPROPERTY(EditAnywhere, Category = "GGJ2023")
 	TSubclassOf<AActor> HexGridTileClass;
+
+	UPROPERTY(EditAnywhere, Category = "GGJ2023")
+	TSubclassOf<AActor> RootPatternPartClass;
 
 	UPROPERTY(EditAnywhere, Category = "GGJ2023")
 	int MaxSeedlingsPerPlayer;
