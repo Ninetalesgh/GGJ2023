@@ -10,6 +10,8 @@ class UxActionComponent;
 class UxAttributeComponent;
 class AxCharacter;
 class UxSeedlingStateComponent;
+class UBillboardComponent;
+class UxCameraFacingFlipBookComponent;
 
 //class UUserWidget;
 //class UxWorldUserWidget;
@@ -29,8 +31,15 @@ public:
 
 protected:
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Visuals")
+	UBillboardComponent* HatComp;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Visuals")
+	UxCameraFacingFlipBookComponent* BodyComp;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	UxSeedlingStateComponent* SeedlingStateComp;
+
 	//UxWorldUserWidget* ActiveWorldWidget;
 
 	//UPROPERTY(EditDefaultsOnly, Category = "UI")

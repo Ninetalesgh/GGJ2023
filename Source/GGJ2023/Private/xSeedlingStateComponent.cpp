@@ -19,7 +19,7 @@ void UxSeedlingStateComponent::SetOwningPlayer(AxCharacter* NewOwner)
 	OwningPlayer = NewOwner;
 	if (PreviousOwner != NewOwner)
 	{
-		OnOwningPlayerChanged.Broadcast(Cast<AxAICharacter>(GetOwner()), PreviousOwner, OwningPlayer);
+		OnRep_OwningPlayer(PreviousOwner);
 	}
 }
 

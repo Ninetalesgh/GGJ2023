@@ -19,7 +19,6 @@ AxCharacter::AxCharacter()
 	HatComp = CreateDefaultSubobject<UBillboardComponent>("HatComp");
 	BodyComp = CreateDefaultSubobject<UxCameraFacingFlipBookComponent>("BodyComp");
 	
-	//SetRootComponent(GetMesh());
 	BodyComp->SetupAttachment(RootComponent);
 	HatComp->SetupAttachment(BodyComp);
 
