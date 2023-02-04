@@ -4,18 +4,24 @@
 #include "xCharacter.h"
 #include "xActionComponent.h"
 #include "xPlayerController.h"
+#include "xCameraFacingFlipBookComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Components/InputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
 #include "Engine/LocalPlayer.h"
 #include "Components/BillboardComponent.h"
+#include "Components/SkeletalMeshComponent.h"
 
 AxCharacter::AxCharacter()
 {
 	ActionComp = CreateDefaultSubobject<UxActionComponent>("ActionComp");
 	HatComp = CreateDefaultSubobject<UBillboardComponent>("HatComp");
-	BodyComp = CreateDefaultSubobject<UBillboardComponent>("BodyComp");
+	BodyComp = CreateDefaultSubobject<UxCameraFacingFlipBookComponent>("BodyComp");
+	
+	//SetRootComponent(GetMesh());
+	BodyComp->SetupAttachment(RootComponent);
+	HatComp->SetupAttachment(BodyComp);
 
 	bUseControllerRotationYaw = false;
 	GetCharacterMovement()->bOrientRotationToMovement = true;
