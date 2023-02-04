@@ -17,7 +17,7 @@ class GGJ2023_API UxAction_Plant : public UxAction
 	GENERATED_BODY()
 
 public:
-	virtual void ServerOnlyActionPart_Implementation(AActor* InstigatorActor) override;
+	void ServerOnlyActionPart_Implementation(AActor* InstigatorActor) override;
 	UxAction_Plant();
 protected:
 
