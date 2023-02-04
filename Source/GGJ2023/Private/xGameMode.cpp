@@ -5,6 +5,8 @@
 #include "xPlayerState.h"
 #include "xCharacter.h"
 #include "xAICharacter.h"
+#include "xFactionComponent.h"
+#include "EngineUtils.h"
 #include "EnvironmentQuery/EnvQueryTypes.h"
 #include "EnvironmentQuery/EnvQueryManager.h"
 #include "TimerManager.h"
@@ -12,8 +14,9 @@
 
 AxGameMode::AxGameMode()
 {
-	//PlayerStateClass = AxPlayerState::StaticClass();
-	//SlotName = "SaveGame01";
+	MaxSeedlingsPerPlayer = 7;
+	MaxSeedlingsTotal = 30;
+	MaxUnassignedSeedlings = 5;
 }
 
 void AxGameMode::StartPlay()
@@ -124,25 +127,35 @@ void AxGameMode::OnQueryCompleted(UEnvQueryInstanceBlueprintWrapper* QueryInstan
 		return;
 	}
 
-	/*
+	
 	int32 NrOfUndefinedSeedlings = 0;
 	for (TActorIterator<AxAICharacter> It(GetWorld()); It; ++It)
 	{
-		AxAICharacter* Seedling = It;
+		AxAICharacter* Seedling = *It;
 
-		UxAttributeComponent* AttributeComp = Cast<UxActionComponent>(Seedling->GetComponentByClass(UxAttributeComponent::StaticClass()));
-		if (AttributeComp && AttributeComp->IsUndefined())
+		UxFactionComponent* FactionComp = Cast<UxFactionComponent>(Seedling->GetComponentByClass(UxFactionComponent::StaticClass()));
+		if (FactionComp && FactionComp->GetFaction() == Faction_Unassigned)
 		{
 			NrOfUndefinedSeedlings++;
 		}
 	}
 
-	const float MaxSeedlingCount = 20.0f
+	float MaxSeedlingCount = 30.0f;
+		if (NrOfUndefinedSeedlings >= MaxSeedlingCount)
+		{
+			return;
+		}
 	
+	if (DifficultyCurve)
+	{
+		MaxSeedlingCount = DifficultyCurve->GetFloatValue(GetWorld()->TimeSeconds);
+	}
+
 	TArray<FVector> Locations = QueryInstance->GetResultsAsLocations();
 
 	if (Locations.Num() > 0)
 	{
 		GetWorld()->SpawnActor<AActor>(FollowerClass, Locations[0], FRotator::ZeroRotator);
-	}*/
+	}
+
 }

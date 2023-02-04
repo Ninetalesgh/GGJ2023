@@ -12,6 +12,7 @@ class AxCharacter;
 class AxAICharacter;
 class UEnvQuery;
 class UEnvQueryInstanceBlueprintWrapper;
+class UCurveFloat;
 
 UCLASS()
 class GGJ2023_API AxGameMode : public AGameModeBase
@@ -32,7 +33,6 @@ public:
 	
 	UPROPERTY(EditAnywhere, Category = "GGJ2023")
 	TSubclassOf<AActor> HexGridTileClass;
-
 
 	UPROPERTY(EditAnywhere, Category = "GGJ2023")
 	int MaxSeedlingsPerPlayer;
@@ -58,6 +58,7 @@ protected:
 	UFUNCTION()
 	void OnQueryCompleted(UEnvQueryInstanceBlueprintWrapper* QueryInstance, EEnvQueryStatus::Type QueryStatus);
 
-
+	UPROPERTY(EditDefaultsOnly, Category = "AI")
+		UCurveFloat* DifficultyCurve;
 };	
 
