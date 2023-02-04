@@ -50,7 +50,10 @@ void UxBuff::StopAction_Implementation(AActor* Instigator)
 void UxBuff::ExecutePeriodicEffect_Implementation(AActor* Instigator)
 {
 	auto* Char = Cast<ACharacter>(Instigator);
-	Char->PlayAnimMontage(PeriodicAnimation);
+	if (Char)
+	{
+		Char->PlayAnimMontage(PeriodicAnimation);
+	}
 }
 
 float UxBuff::GetTimeRemaining() const
