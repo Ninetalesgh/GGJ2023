@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "xAction.h"
+#include "xRootShape.h"
 #include "xAction_Plant.generated.h"
 
 
@@ -23,6 +24,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, Category = "Action")
 	UParticleSystem* ActionEffect;
+
+	UPROPERTY(EditAnywhere, Category = "Action")
+	TSubclassOf<AxRootShape> RootShapeClass;
 
 	UFUNCTION()
 	void ActionDelay_Elapsed(AxCharacter* InstigatorCharacter);

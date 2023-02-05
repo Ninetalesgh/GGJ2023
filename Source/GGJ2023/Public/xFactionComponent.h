@@ -51,6 +51,8 @@ class GGJ2023_API UxFactionComponent : public UActorComponent
 
 public:
 	UxFactionComponent();
+	UFUNCTION(BlueprintPure, Category = "Credits")
+	static UxFactionComponent* GetFactionComponentFromActor(AActor* FromActor);
 
 	UPROPERTY(BlueprintAssignable, Category = "HexTile State")
 	FOnFactionChanged OnFactionChanged;

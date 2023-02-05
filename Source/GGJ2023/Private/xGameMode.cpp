@@ -6,7 +6,8 @@
 #include "xCharacter.h"
 #include "xAICharacter.h"
 #include "xFactionComponent.h"
-#include "xRootPatternPart.h"
+#include "xSeedlingStateComponent.h"
+#include "xHexGridTile.h"
 #include "EngineUtils.h"
 #include "EnvironmentQuery/EnvQueryTypes.h"
 #include "EnvironmentQuery/EnvQueryManager.h"
@@ -53,13 +54,68 @@ TArray<AxAICharacter*> AxGameMode::GetAllSeedlingsOfFaction(EFaction Faction)
 	{
 		AxAICharacter* Seedling = *It;
 		UxFactionComponent* FactionComp = Cast<UxFactionComponent>(Seedling->GetComponentByClass(UxFactionComponent::StaticClass()));
-		if (FactionComp && FactionComp->GetFaction() == Faction_Unassigned)
+		if (FactionComp && FactionComp->GetFaction() == Faction)
 		{
 			SeedlingsOfFaction.Add(Seedling);
 		}
 	}
 
 	return SeedlingsOfFaction;
+}
+
+TArray<AxAICharacter*> AxGameMode::GetAllPlantedSeedlingsOfFaction(EFaction Faction)
+{
+	TArray<AxAICharacter*> SeedlingsOfFaction;
+
+	for (TActorIterator<AxAICharacter> It(GetWorld()); It; ++It)
+	{
+		AxAICharacter* Seedling = *It;
+		UxFactionComponent* FactionComp = Cast<UxFactionComponent>(Seedling->GetComponentByClass(UxFactionComponent::StaticClass()));
+		UxSeedlingStateComponent* SeedlingStateComp = Cast<UxSeedlingStateComponent>(Seedling->GetComponentByClass(UxSeedlingStateComponent::StaticClass()));	
+		
+		if (FactionComp && FactionComp->GetFaction() == Faction && SeedlingStateComp->GetSeedlingState() == SeedlingState_Planted)
+		{
+			SeedlingsOfFaction.Add(Seedling);
+		}
+	}
+
+	return SeedlingsOfFaction;
+}
+
+TArray<AxAICharacter*> AxGameMode::GetAllUprootedSeedlingsOfFaction(EFaction Faction)
+{
+	TArray<AxAICharacter*> SeedlingsOfFaction;
+
+	for (TActorIterator<AxAICharacter> It(GetWorld()); It; ++It)
+	{
+		AxAICharacter* Seedling = *It;
+		UxFactionComponent* FactionComp = Cast<UxFactionComponent>(Seedling->GetComponentByClass(UxFactionComponent::StaticClass()));
+		UxSeedlingStateComponent* SeedlingStateComp = Cast<UxSeedlingStateComponent>(Seedling->GetComponentByClass(UxSeedlingStateComponent::StaticClass()));
+
+		if (FactionComp && FactionComp->GetFaction() == Faction && SeedlingStateComp->GetSeedlingState() == SeedlingState_Uprooted)
+		{
+			SeedlingsOfFaction.Add(Seedling);
+		}
+	}
+
+	return SeedlingsOfFaction;
+}
+
+TArray<AxHexGridTile*> AxGameMode::GetAllHexTilesOfFaction(EFaction Faction)
+{
+	TArray<AxHexGridTile*> HexesOfFaction;
+
+	for (TActorIterator<AxHexGridTile> It(GetWorld()); It; ++It)
+	{
+		AxHexGridTile* Hex = *It;
+		UxFactionComponent* FactionComp = Cast<UxFactionComponent>(Hex->GetComponentByClass(UxFactionComponent::StaticClass()));
+		if (FactionComp && FactionComp->GetFaction() == Faction)
+		{
+			HexesOfFaction.Add(Hex);
+		}
+	}
+
+	return HexesOfFaction;
 }
 
 void AxGameMode::HandleStartingNewPlayer_Implementation(APlayerController* NewPlayer)
@@ -87,26 +143,6 @@ void AxGameMode::HandleStartingNewPlayer_Implementation(APlayerController* NewPl
 		if (IsValid(NewPawn))
 		{
 			NewPlayer->SetPawn(NewPawn);	
-		}
-
-		auto* Char = Cast<AxCharacter>(NewPawn);
-		if (FollowerClass->IsChildOf<AxAICharacter>())
-		{
-			FVector SpawnLocation = Char->GetActorLocation();
-			FActorSpawnParameters SpawnParams;
-			SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-			Char->Follower = Cast<AxAICharacter>(GetWorld()->SpawnActor<AActor>(FollowerClass, SpawnLocation + FVector(0, 0, 200), FRotator::ZeroRotator, SpawnParams));
-			Char->Follower->SpawnDefaultController();
-		
-			//auto* Root = Cast<AxRootPatternPart>(GetWorld()->SpawnActor<AActor>(RootPatternPartClass, SpawnLocation + FVector(0,200,0), FRotator::ZeroRotator, SpawnParams));
-
-			TArray<AActor*> Poop;
-			Poop.Add(Char);
-			Poop.Add(Char->Follower);
-			//Poop.Add(Root);
-
-			//Root->SetShape(Poop);
-		
 		}
 	}
 

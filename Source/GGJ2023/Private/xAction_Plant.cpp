@@ -5,10 +5,13 @@
 #include "TimerManager.h"
 #include "xCharacter.h"
 #include "xAICharacter.h"
+#include "xGameMode.h"
 #include "xSeedlingStateComponent.h"
+#include "xRootShape.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Components/SkeletalMeshComponent.h"
+#include "../GGJ2023.h"
 
 UxAction_Plant::UxAction_Plant()
 {
@@ -23,25 +26,92 @@ void UxAction_Plant::ServerOnlyActionPart_Implementation(AActor* InstigatorActor
 	if (Character)
 	{
 		//UGameplayStatics::SpawnEmitterAttached(ActionEffect, Character->GetMesh(),HandSocketName, FVector::ZeroVector, FRotator::ZeroRotator, EAttachLocation::SnapToTarget);
-
+		Character->PlayAnimMontage(ActionAnimation);
+		
 		FTimerHandle TimerHandle_ActionDelay;
 		FTimerDelegate Delegate = FTimerDelegate::CreateUObject(this, &UxAction_Plant::ActionDelay_Elapsed, Character);
-		GetWorld()->GetTimerManager().SetTimer(TimerHandle_ActionDelay, Delegate, ActionAnimDelay, false);
-		
+		GetWorld()->GetTimerManager().SetTimer(TimerHandle_ActionDelay, Delegate, ActionAnimDelay, false);		
 	}
 }
 
 void UxAction_Plant::ActionDelay_Elapsed(AxCharacter* InstigatorCharacter)
 {
+	auto* GM = Cast<AxGameMode>(InstigatorCharacter->GetWorld()->GetAuthGameMode());
+	auto* FC = UxFactionComponent::GetFactionComponentFromActor(InstigatorCharacter);
 
-	//TODO fetch AI follower here and plant it in the ground in front of player
-	if (InstigatorCharacter->Follower)
+	if (GM && FC)
 	{
-		InstigatorCharacter->Follower->SetActorTransform(InstigatorCharacter->GetActorTransform());
-		auto* SeedlingState = Cast<UxSeedlingStateComponent>(InstigatorCharacter->Follower->GetComponentByClass(UxSeedlingStateComponent::StaticClass()));
-		if (ensure(SeedlingState))
+		auto Factoids = GM->GetAllPlantedSeedlingsOfFaction(FC->GetFaction());
+		
+		auto* NextSeedling = InstigatorCharacter->GetNextSeedling();
+		
+		if (auto* NextSeedlingFactionComp = UxFactionComponent::GetFactionComponentFromActor(NextSeedling))
 		{
-			SeedlingState->SetOwningPlayer(InstigatorCharacter);
+			NextSeedlingFactionComp->SetFaction(FC->GetFaction());
+			auto* SeedlingStateComp = Cast<UxSeedlingStateComponent>(NextSeedling->GetComponentByClass(UxSeedlingStateComponent::StaticClass()));
+			if (SeedlingStateComp)
+			{
+				SeedlingStateComp->SetSeedlingState(SeedlingState_Planted);
+			}
+			
+			//Reorganize walking seedlings
+			InstigatorCharacter->MakeSnake();
+
+			//Rooted poopers
+			if (Factoids.Num() > 1)
+			{
+				float RadSquared= InstigatorCharacter->RootRadius* InstigatorCharacter->RootRadius;
+				float BestDistances[2] = {9999999.9f,9999999.f};
+			
+				AxAICharacter* Seedlings[2];
+
+				bool OneInRange = false;
+
+				for (auto F : Factoids)
+				{
+					float Dist = (F->GetActorLocation() - InstigatorCharacter->GetActorLocation()).SquaredLength();
+
+					if (Dist < RadSquared)
+					{
+						OneInRange = true;
+					}
+
+					if (Dist < BestDistances[0])
+					{
+						if (BestDistances[0] < BestDistances[1])
+						{
+							BestDistances[1] = BestDistances[0];
+							Seedlings[1] = F;
+						}
+
+						BestDistances[0] = Dist;
+						Seedlings[0] = F;
+					}
+				}
+
+				TArray<FVector> Positions;
+			
+				Positions.Add(NextSeedling->GetActorLocation());
+				Positions.Add(Seedlings[1]->GetActorLocation());
+				Positions.Add(Seedlings[0]->GetActorLocation());
+
+				FActorSpawnParameters SpawnParams;
+				SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+				auto* NewRootShape = Cast<AxRootShape>(GetWorld()->SpawnActor<AActor>(RootShapeClass, FVector(0,0,0), FRotator::ZeroRotator, SpawnParams));
+				NewRootShape->SetVertices(Positions);
+			}
+			else if (Factoids.Num() == 1)
+			{
+				LogOnScreen(this, L"Planted Seedling - One Other seedling planted.");
+			}
+			else
+			{
+				LogOnScreen(this, L"Planted Seedling - No Seedling planted yet.");
+			}
+		}
+		else
+		{
+			LogOnScreen(this, L"No uprooted seedlings for your faction :(.");
 		}
 	}
 

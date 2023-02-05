@@ -13,6 +13,7 @@ class UInputAction;
 class UxCameraFacingFlipBookComponent;
 class UxFactionComponent;
 class AxAICharacter;
+class UxInteractionComponent;
 
 UCLASS()
 class GGJ2023_API AxCharacter : public ACharacter
@@ -26,23 +27,36 @@ protected:
 	virtual void BeginPlay() override;
 
 	void Plant();
+	void Uproot();
 
 	void MoveUp(float Value);
 	void MoveRight(float Value);
 
 public:	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
+	float RootRadius;
 
 	AxAICharacter* GetNextSeedling();
 	AxAICharacter* GetLastSeedling();
 
+	UFUNCTION(BlueprintCallable)
+	void MakeSnake();
+protected:
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
-	AxAICharacter* Follower;
+	AxAICharacter* NextFollower;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
+	AxAICharacter* LastFollower;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	UxActionComponent* ActionComp;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Visuals")
 	UxCameraFacingFlipBookComponent* BodyComp;
+
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+	UxInteractionComponent* InteractionComp;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	UxFactionComponent* FactionComp;

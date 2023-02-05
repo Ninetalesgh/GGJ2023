@@ -31,23 +31,33 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Seedling State")
 	void SetOwningPlayer(AxCharacter* NewOwner);
-	
+
+	UFUNCTION(BlueprintPure, Category = "Seedling State")
+	AxCharacter* GetOwningPlayer() const;
+
 	UPROPERTY(BlueprintAssignable, Category = "Seedling State")
 	FOnOwningPlayerChanged OnOwningPlayerChanged;
 
 	UPROPERTY(BlueprintAssignable, Category = "Seedling State")
 	FOnSeedlingStateChanged OnSeedlingStateChanged;
 
+
+	UFUNCTION(BlueprintPure, Category = "Seedling State")
+	ESeedlingState GetSeedlingState() const;
+
+	UFUNCTION(BlueprintCallable, Category = "Seedling State")
+	void SetSeedlingState(ESeedlingState NewState);
+
 protected:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, ReplicatedUsing = "OnRep_SeedlingStateChange", Category = "Seedling Properties")
+	TEnumAsByte<ESeedlingState> State;
+
 
 	UFUNCTION()
 	void OnRep_OwningPlayerChange(AxCharacter* PreviousOwner);
 
 	UFUNCTION()
 	void OnRep_SeedlingStateChange(ESeedlingState PreviousState);
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, ReplicatedUsing = "OnRep_SeedlingStateChange", Category = "Seedling Properties")
-	TEnumAsByte<ESeedlingState> State;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, ReplicatedUsing = "OnRep_OwningPlayerChange", Category = "Seedling Properties")
 	AxCharacter* OwningPlayer;		
