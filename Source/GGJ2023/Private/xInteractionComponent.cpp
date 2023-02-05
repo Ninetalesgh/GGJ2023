@@ -5,6 +5,7 @@
 #include "Engine/Engine.h"
 #include "GameFramework/Actor.h"
 #include "xAICharacter.h"
+#include "xCharacter.h"
 #include "xSeedlingStateComponent.h"
 #include "xFactionComponent.h"
 #include "Engine/World.h"
@@ -14,7 +15,7 @@ UxInteractionComponent::UxInteractionComponent()
 {
 	PrimaryComponentTick.bCanEverTick = true;
 	TraceDistance = 500.f;
-	TraceRadius = 30.0f;
+	TraceRadius = 100.0f;
 	CollisionChannel = ECC_Pawn;
 }
 
@@ -41,6 +42,21 @@ void UxInteractionComponent::ServerInteract_Implementation(AActor* InFocus)
 
 		auto* SSC = Cast<UxSeedlingStateComponent>(Seedling->GetComponentByClass(UxSeedlingStateComponent::StaticClass()));
 		SSC->SetSeedlingState(SeedlingState_Uprooted);
+
+		auto* Char = Cast<AxCharacter>(GetOwner());
+		if (Char)
+		{
+			auto* Last = Char->GetLastSeedling();
+
+			if (Last)
+			{
+				Seedling->SetNext(Last);
+			}
+			else
+			{
+				Seedling->SetNext(Char);
+			}
+		}
 	}
 }
 
@@ -59,16 +75,10 @@ void UxInteractionComponent::FindBestSeedling()
 	FCollisionShape Shape;
 	Shape.SetSphere(TraceRadius);
 	bool bBlockingHit = GetWorld()->SweepMultiByObjectType(Hits, EyeLocation, End, FQuat::Identity, ObjectQueryParams, Shape);
-	FColor LineColor = bBlockingHit ? FColor::Green : FColor::Red;
 
 	FocusedActor = nullptr;
 	for (FHitResult Hit : Hits)
 	{
-		//if (bDebugDraw)
-		{
-			DrawDebugSphere(GetWorld(), Hit.ImpactPoint, TraceRadius, 32, LineColor, false, 0.0f);
-		}
-
 		AActor* HitActor = Hit.GetActor();
 		if (auto* Seedling = Cast<AxAICharacter>(HitActor))
 		{
@@ -76,6 +86,11 @@ void UxInteractionComponent::FindBestSeedling()
 			if (SSC->GetSeedlingState() == SeedlingState_Planted)
 			{
 				FocusedActor = HitActor;
+				DrawDebugSphere(GetWorld(), Hit.ImpactPoint, TraceRadius, 32, FColor::Green, false, 0.0f);
+			}
+			else
+			{
+				DrawDebugSphere(GetWorld(), Hit.ImpactPoint, TraceRadius, 32, FColor::Red, false, 0.0f);
 			}
 		}
 	}
@@ -89,11 +104,6 @@ void UxInteractionComponent::FindBestSeedling()
 		//TODO remove hover effect
 	}
 
-
-	//if (bDebugDraw)
-	{
-		DrawDebugLine(GetWorld(), EyeLocation, End, LineColor, false, 0.0f, 0, 2.0f);
-	}
 }
 
 
