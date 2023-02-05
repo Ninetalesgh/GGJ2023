@@ -25,9 +25,6 @@ void UxAction_Plant::ServerOnlyActionPart_Implementation(AActor* InstigatorActor
 	AxCharacter* Character = Cast<AxCharacter>(InstigatorActor);
 	if (Character)
 	{
-		//UGameplayStatics::SpawnEmitterAttached(ActionEffect, Character->GetMesh(),HandSocketName, FVector::ZeroVector, FRotator::ZeroRotator, EAttachLocation::SnapToTarget);
-		Character->PlayAnimMontage(ActionAnimation);
-		
 		FTimerHandle TimerHandle_ActionDelay;
 		FTimerDelegate Delegate = FTimerDelegate::CreateUObject(this, &UxAction_Plant::ActionDelay_Elapsed, Character);
 		GetWorld()->GetTimerManager().SetTimer(TimerHandle_ActionDelay, Delegate, ActionAnimDelay, false);		

@@ -40,6 +40,9 @@ public:
 	AxAICharacter* GetLastSeedling();
 
 	UFUNCTION(BlueprintCallable)
+	void AppendSeedling(AxAICharacter* Seedling);
+
+	UFUNCTION(BlueprintCallable)
 	void MakeSnake();
 protected:
 
@@ -55,7 +58,7 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Visuals")
 	UxCameraFacingFlipBookComponent* BodyComp;
 
-	UPROPERTY(VisibleAnywhere, Category = "Components")
+	UPROPERTY(EditAnywhere, Category = "Components")
 	UxInteractionComponent* InteractionComp;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
