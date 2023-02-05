@@ -50,6 +50,7 @@ void UxAction_Plant::ActionDelay_Elapsed(AxCharacter* InstigatorCharacter)
 			{
 				SeedlingStateComp->SetSeedlingState(SeedlingState_Planted);
 				SeedlingStateComp->SetOwningPlayer(nullptr);
+				NextSeedling->SetNext(nullptr);
 			}
 			
 			//Reorganize walking seedlings

@@ -43,7 +43,7 @@ void AxRootShape::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActo
 {
 	if (OtherActor != OwningPlayer && HasAuthority())
 	{
-		auto* OwnerFactionComp = UxFactionComponent::GetFactionComponentFromActor(GetOwner());
+		auto* OwnerFactionComp = UxFactionComponent::GetFactionComponentFromActor(OwningPlayer);
 		auto* OtherFactionComp = UxFactionComponent::GetFactionComponentFromActor(OtherActor);
 		if (OwnerFactionComp && OtherFactionComp)
 		{
@@ -83,7 +83,7 @@ void AxRootShape::InitCollision()
 		{
 			if (V)
 			{
-				Poop.Add(V->GetActorLocation());
+				Poop.Add(V->GetActorLocation() - FVector(0,0,200));
 			}
 			else
 			{
@@ -91,9 +91,9 @@ void AxRootShape::InitCollision()
 			}
 		}
 
-		Poop.Add(Poop[0] + FVector(0, 0, 500));
-		Poop.Add(Poop[1] + FVector(0, 0, 500));
-		Poop.Add(Poop[2] + FVector(0, 0, 500));
+		Poop.Add(Poop[0] + FVector(0, 0, 200));
+		Poop.Add(Poop[1] + FVector(0, 0, 200));
+		Poop.Add(Poop[2] + FVector(0, 0, 200));
 
 		ProceduralMeshComp->AddCollisionConvexMesh(Poop);
 	}
@@ -130,9 +130,39 @@ void AxRootShape::OnRep_SeedlingsChange(TArray<AxAICharacter*> OldSeedlings)
 
 void AxRootShape::OnSeedlingStateChange(AxAICharacter* Seedling, ESeedlingState NewSeedlingState, ESeedlingState OldSeedlingState)
 {
-	if (NewSeedlingState == SeedlingState_Uprooted)
+	if (HasAuthority())
 	{
-		ProceduralMeshComp->DestroyComponent();
+		if (NewSeedlingState == SeedlingState_Uprooted)
+		{
+			for (auto Seed : Seedlings)
+			{
+				if (Seed)
+				{
+					auto* SeedlingStateComp = Cast<UxSeedlingStateComponent>(Seed->GetComponentByClass(UxSeedlingStateComponent::StaticClass()));
+					if (SeedlingStateComp)
+					{
+						SeedlingStateComp->OnSeedlingStateChanged.RemoveDynamic(this, &AxRootShape::OnSeedlingStateChange);
+					}
+				}
+			}
+			Seedlings.Empty();
+
+			TSet<AActor*> OverlappingActors;
+			ProceduralMeshComp->GetOverlappingActors(OverlappingActors);
+			for (auto A : OverlappingActors)
+			{
+				if (Cast<AxHexGridTile>(A))
+				{
+					auto* FC = UxFactionComponent::GetFactionComponentFromActor(A);
+					if (FC)
+					{
+						FC->SetFaction(Faction_Unassigned);
+					}
+				}
+			}
+
+			GetWorld()->DestroyActor(this);
+		}
 	}
 }
 
