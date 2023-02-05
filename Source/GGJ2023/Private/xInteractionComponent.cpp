@@ -12,11 +12,12 @@
 #include "Engine/World.h"
 #include "CollisionQueryParams.h"
 #include "Net/UnrealNetwork.h"
+#include "../GGJ2023.h"
 
 UxInteractionComponent::UxInteractionComponent()
 {
 	PrimaryComponentTick.bCanEverTick = true;
-	TraceDistance = 500.f;
+	TraceDistance = 750.f;
 	TraceRadius = 100.0f;
 	CollisionChannel = ECC_Pawn;
 }
@@ -31,7 +32,7 @@ void UxInteractionComponent::ServerInteract_Implementation(AActor* InFocus)
 {
 	if (!InFocus)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 1.0f, FColor::Red, "No seedling to uproot.");
+		LogOnScreen(this, L"No planted seedling in focus to uproot.", FColor::Red);
 		return;
 	}
 
@@ -49,6 +50,7 @@ void UxInteractionComponent::ServerInteract_Implementation(AActor* InFocus)
 		if (Char)
 		{
 			Char->AppendSeedling(Seedling);
+			SSC->SetOwningPlayer(Char);
 			auto* Last = Char->GetLastSeedling();
 
 			if (Last)

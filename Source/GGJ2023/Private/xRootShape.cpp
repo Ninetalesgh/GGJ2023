@@ -19,7 +19,7 @@ AxRootShape::AxRootShape()
 
 	ProceduralMeshComp = CreateDefaultSubobject<UProceduralMeshComponent>("ProceduralMeshComp");
 	ProceduralMeshComp->bUseComplexAsSimpleCollision = false;
-	//ProceduralMeshComp->SetCollisionProfileName(L"RootShape");
+	ProceduralMeshComp->SetCollisionProfileName(L"RootShape");
 	ProceduralMeshComp->SetCollisionResponseToAllChannels(ECR_Overlap);
 	ProceduralMeshComp->SetGenerateOverlapEvents(true);
 
@@ -54,7 +54,7 @@ void AxRootShape::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActo
 			{
 				if (Cast<AxAICharacter>(OtherActor) || Cast<AxHexGridTile>(OtherActor))
 				{
-					OtherFactionComp->SetFaction(OwnerFaction);
+				//	OtherFactionComp->SetFaction(OwnerFaction);
 				}
 			}
 		}
@@ -69,6 +69,22 @@ void AxRootShape::Init(AxCharacter* ShapeOwner, TArray<AxAICharacter*> NewSeedli
 		auto Old = Seedlings;
 		Seedlings = NewSeedlings;
 		OnRep_SeedlingsChange(Old);
+
+		auto* ShapeOwnerFC = UxFactionComponent::GetFactionComponentFromActor(ShapeOwner);
+
+		TSet<AActor*> OverlappingActors;
+		ProceduralMeshComp->GetOverlappingActors(OverlappingActors);
+		for (auto A : OverlappingActors)
+		{
+			if (Cast<AxHexGridTile>(A))
+			{
+				auto* FC = UxFactionComponent::GetFactionComponentFromActor(A);
+				if (FC)
+				{
+					FC->SetFaction(ShapeOwnerFC->GetFaction());
+				}
+			}
+		}
 	}
 }
 

@@ -25,9 +25,16 @@ void UxAction_Plant::ServerOnlyActionPart_Implementation(AActor* InstigatorActor
 	AxCharacter* Character = Cast<AxCharacter>(InstigatorActor);
 	if (Character)
 	{
-		FTimerHandle TimerHandle_ActionDelay;
-		FTimerDelegate Delegate = FTimerDelegate::CreateUObject(this, &UxAction_Plant::ActionDelay_Elapsed, Character);
-		GetWorld()->GetTimerManager().SetTimer(TimerHandle_ActionDelay, Delegate, ActionAnimDelay, false);		
+		if (ActionAnimDelay >= 0.001f)
+		{
+			FTimerHandle TimerHandle_ActionDelay;
+			FTimerDelegate Delegate = FTimerDelegate::CreateUObject(this, &UxAction_Plant::ActionDelay_Elapsed, Character);
+			GetWorld()->GetTimerManager().SetTimer(TimerHandle_ActionDelay, Delegate, ActionAnimDelay, false);
+		}
+		else
+		{
+			ActionDelay_Elapsed(Character);
+		}
 	}
 }
 
@@ -49,7 +56,6 @@ void UxAction_Plant::ActionDelay_Elapsed(AxCharacter* InstigatorCharacter)
 			if (SeedlingStateComp)
 			{
 				SeedlingStateComp->SetSeedlingState(SeedlingState_Planted);
-				SeedlingStateComp->SetOwningPlayer(nullptr);
 				NextSeedling->SetNext(nullptr);
 			}
 			
