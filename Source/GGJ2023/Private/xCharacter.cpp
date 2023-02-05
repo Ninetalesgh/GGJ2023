@@ -63,6 +63,7 @@ void AxCharacter::MakeSnake()
 	{
 		auto UprootedSeedlings = GM->GetAllUprootedSeedlingsOfFaction(FactionComp->GetFaction());
 		NextFollower = UprootedSeedlings.IsEmpty() ? nullptr : UprootedSeedlings[0];
+		LastFollower = nullptr;
 		if (NextFollower)
 		{
 			NextFollower->SetNext(this);
@@ -79,6 +80,27 @@ void AxCharacter::MakeSnake()
 	}
 }
 
+void AxCharacter::AppendSeedling(AxAICharacter* Seedling)
+{
+	if (!HasAuthority())
+	{
+		return;
+	}
+
+	if (LastFollower)
+	{
+		Seedling->SetNext(LastFollower);
+	}
+	else
+	{
+		Seedling->SetNext(this);
+	}
+
+	if (!NextFollower)
+	{
+		NextFollower = Seedling;
+	}
+}
 
 AxAICharacter* AxCharacter::GetNextSeedling()
 {

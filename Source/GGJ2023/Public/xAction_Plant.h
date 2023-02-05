@@ -23,9 +23,6 @@ public:
 protected:
 
 	UPROPERTY(EditAnywhere, Category = "Action")
-	UParticleSystem* ActionEffect;
-
-	UPROPERTY(EditAnywhere, Category = "Action")
 	TSubclassOf<AxRootShape> RootShapeClass;
 
 	UFUNCTION()

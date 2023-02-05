@@ -6,6 +6,10 @@
 #include "Components/ActorComponent.h"
 #include "xInteractionComponent.generated.h"
 
+class AxCharacter;
+class AxAICharacter;
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnUproot, AxCharacter*, Player, AxAICharacter*, Seedling);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class GGJ2023_API UxInteractionComponent : public UActorComponent
@@ -23,6 +27,12 @@ protected:
 	void ServerInteract(AActor* InFocus);
 
 	void FindBestSeedling();
+
+	UPROPERTY(BlueprintAssignable, Category = "Uproot")
+	FOnUproot OnUproot;
+
+	UFUNCTION(NetMulticast, Reliable)
+	void MulticastUproot(AxCharacter* Player, AxAICharacter* Seedling);
 
 	UPROPERTY()
 	AActor* FocusedActor;

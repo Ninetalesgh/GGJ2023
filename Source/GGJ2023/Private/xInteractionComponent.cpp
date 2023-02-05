@@ -6,10 +6,12 @@
 #include "GameFramework/Actor.h"
 #include "xAICharacter.h"
 #include "xCharacter.h"
+#include "xActionComponent.h"
 #include "xSeedlingStateComponent.h"
 #include "xFactionComponent.h"
 #include "Engine/World.h"
 #include "CollisionQueryParams.h"
+#include "Net/UnrealNetwork.h"
 
 UxInteractionComponent::UxInteractionComponent()
 {
@@ -36,6 +38,7 @@ void UxInteractionComponent::ServerInteract_Implementation(AActor* InFocus)
 	AxAICharacter* Seedling = Cast<AxAICharacter>(InFocus);
 	if (Seedling)
 	{
+		auto* Char = Cast<AxCharacter>(GetOwner());
 		UxFactionComponent* FC = UxFactionComponent::GetFactionComponentFromActor(Seedling);
 		UxFactionComponent* OwnerFC = UxFactionComponent::GetFactionComponentFromActor(GetOwner());
 		FC->SetFaction(OwnerFC->GetFaction());
@@ -43,9 +46,9 @@ void UxInteractionComponent::ServerInteract_Implementation(AActor* InFocus)
 		auto* SSC = Cast<UxSeedlingStateComponent>(Seedling->GetComponentByClass(UxSeedlingStateComponent::StaticClass()));
 		SSC->SetSeedlingState(SeedlingState_Uprooted);
 
-		auto* Char = Cast<AxCharacter>(GetOwner());
 		if (Char)
 		{
+			Char->AppendSeedling(Seedling);
 			auto* Last = Char->GetLastSeedling();
 
 			if (Last)
@@ -57,6 +60,9 @@ void UxInteractionComponent::ServerInteract_Implementation(AActor* InFocus)
 				Seedling->SetNext(Char);
 			}
 		}
+
+		OnUproot.Broadcast(Char,Seedling);
+		MulticastUproot(Char, Seedling);
 	}
 }
 
@@ -104,6 +110,12 @@ void UxInteractionComponent::FindBestSeedling()
 		//TODO remove hover effect
 	}
 
+}
+
+
+void UxInteractionComponent::MulticastUproot_Implementation(AxCharacter* Player, AxAICharacter* Seedling)
+{
+	OnUproot.Broadcast(Player,Seedling);
 }
 
 

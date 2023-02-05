@@ -40,6 +40,9 @@ public:
 	AxAICharacter* GetLastSeedling();
 
 	UFUNCTION(BlueprintCallable)
+	void AppendSeedling(AxAICharacter* Seedling);
+
+	UFUNCTION(BlueprintCallable)
 	void MakeSnake();
 protected:
 
