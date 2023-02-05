@@ -6,6 +6,7 @@
 #include "xFactionComponent.h"
 #include "xCharacter.h"
 #include "xAICharacter.h"
+#include "xSeedlingStateComponent.h"
 #include "xHexGridTile.h"
 #include "ProceduralMeshComponent.h"
 #include "DrawDebugHelpers.h"
@@ -40,7 +41,7 @@ void AxRootShape::OnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor*
 
 void AxRootShape::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	if (OtherActor != GetOwner() && GetOwner()->HasAuthority())
+	if (OtherActor != OwningPlayer && HasAuthority())
 	{
 		auto* OwnerFactionComp = UxFactionComponent::GetFactionComponentFromActor(GetOwner());
 		auto* OtherFactionComp = UxFactionComponent::GetFactionComponentFromActor(OtherActor);
@@ -60,29 +61,35 @@ void AxRootShape::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActo
 	}
 }
 
-void AxRootShape::SetVertices(TArray<FVector> NewVertices)
+void AxRootShape::Init(AxCharacter* ShapeOwner, TArray<AxAICharacter*> NewSeedlings)
 {
-	if (bIsInitialized || !GetOwner()->HasAuthority())
+	if (!bIsInitialized && HasAuthority())
 	{
-		return;
+		OwningPlayer = ShapeOwner;
+		auto Old = Seedlings;
+		Seedlings = NewSeedlings;
+		OnRep_SeedlingsChange(Old);
 	}
-
-	Vertices = NewVertices;
 }
 
 void AxRootShape::InitCollision()
 {
-	if (!Vertices.IsEmpty() && !bIsInitialized)
+	if (!Seedlings.IsEmpty() && !bIsInitialized)
 	{
 		bIsInitialized = true;
-		FVector N = Vertices.Last(0);
-		for (auto V : Vertices)
-		{
-			DrawDebugLine(GetWorld(), V, N, FColor::Blue, false, 10.0f, 0, 2.0f);
-			N = V;
-		}
 
-		TArray<FVector> Poop = Vertices;
+		TArray<FVector> Poop;
+		for (auto V : Seedlings)
+		{
+			if (V)
+			{
+				Poop.Add(V->GetActorLocation());
+			}
+			else
+			{
+				Poop.Add(FVector());
+			}
+		}
 
 		Poop.Add(Poop[0] + FVector(0, 0, 500));
 		Poop.Add(Poop[1] + FVector(0, 0, 500));
@@ -92,14 +99,41 @@ void AxRootShape::InitCollision()
 	}
 }
 
-void AxRootShape::OnRep_VerticesChange(TArray<FVector> OldVertices)
+void AxRootShape::OnRep_SeedlingsChange(TArray<AxAICharacter*> OldSeedlings)
 {
+	for (auto Seed : OldSeedlings)
+	{
+		if (Seed)
+		{
+			auto* SeedlingStateComp = Cast<UxSeedlingStateComponent>(Seed->GetComponentByClass(UxSeedlingStateComponent::StaticClass()));
+			SeedlingStateComp->OnSeedlingStateChanged.RemoveDynamic(this, &AxRootShape::OnSeedlingStateChange);
+		}
+	}
+
+	for (auto Seed : Seedlings)
+	{
+		if (Seed)
+		{
+			auto* SeedlingStateComp = Cast<UxSeedlingStateComponent>(Seed->GetComponentByClass(UxSeedlingStateComponent::StaticClass()));
+			SeedlingStateComp->OnSeedlingStateChanged.AddDynamic(this, &AxRootShape::OnSeedlingStateChange);
+		}
+	}
+
 	InitCollision();
+}
+
+void AxRootShape::OnSeedlingStateChange(AxAICharacter* Seedling, ESeedlingState NewSeedlingState, ESeedlingState OldSeedlingState)
+{
+	if (NewSeedlingState == SeedlingState_Uprooted)
+	{
+		ProceduralMeshComp->DestroyComponent();
+	}
 }
 
 void AxRootShape::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	DOREPLIFETIME(AxRootShape, Vertices);
+	DOREPLIFETIME(AxRootShape, Seedlings);
+	DOREPLIFETIME(AxRootShape, OwningPlayer);
 }

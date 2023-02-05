@@ -22,14 +22,14 @@ public:
 
 	void Interact();
 
+	UPROPERTY(BlueprintAssignable, Category = "Uproot")
+	FOnUproot OnUproot;
+
 protected:
 	UFUNCTION(Server, Reliable)
 	void ServerInteract(AActor* InFocus);
 
 	void FindBestSeedling();
-
-	UPROPERTY(BlueprintAssignable, Category = "Uproot")
-	FOnUproot OnUproot;
 
 	UFUNCTION(NetMulticast, Reliable)
 	void MulticastUproot(AxCharacter* Player, AxAICharacter* Seedling);

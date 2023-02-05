@@ -58,7 +58,7 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Visuals")
 	UxCameraFacingFlipBookComponent* BodyComp;
 
-	UPROPERTY(EditAnywhere, Category = "Components")
+	UPROPERTY(VisibleAnywhere, Category = "Components")
 	UxInteractionComponent* InteractionComp;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")

@@ -49,6 +49,7 @@ void UxAction_Plant::ActionDelay_Elapsed(AxCharacter* InstigatorCharacter)
 			if (SeedlingStateComp)
 			{
 				SeedlingStateComp->SetSeedlingState(SeedlingState_Planted);
+				SeedlingStateComp->SetOwningPlayer(nullptr);
 			}
 			
 			//Reorganize walking seedlings
@@ -58,7 +59,7 @@ void UxAction_Plant::ActionDelay_Elapsed(AxCharacter* InstigatorCharacter)
 			if (Factoids.Num() > 1)
 			{
 				float RadSquared= InstigatorCharacter->RootRadius* InstigatorCharacter->RootRadius;
-				float BestDistances[2] = {9999999.9f,9999999.f};
+				float BestDistances[2] = {9999999999.0f,9999999999.0f };
 			
 				AxAICharacter* Seedlings[2];
 
@@ -78,24 +79,36 @@ void UxAction_Plant::ActionDelay_Elapsed(AxCharacter* InstigatorCharacter)
 						if (BestDistances[0] < BestDistances[1])
 						{
 							BestDistances[1] = BestDistances[0];
-							Seedlings[1] = F;
+							Seedlings[1] = Seedlings[0];
 						}
 
 						BestDistances[0] = Dist;
 						Seedlings[0] = F;
 					}
+					else if (Dist < BestDistances[1])
+					{
+						BestDistances[1] = Dist;
+						Seedlings[1] = F;
+					}
 				}
 
-				TArray<FVector> Positions;
+				if (OneInRange)
+				{
+					TArray<AxAICharacter*> RootedSeedlings;
 			
-				Positions.Add(NextSeedling->GetActorLocation());
-				Positions.Add(Seedlings[1]->GetActorLocation());
-				Positions.Add(Seedlings[0]->GetActorLocation());
+					RootedSeedlings.Add(NextSeedling);
+					RootedSeedlings.Add(Seedlings[1]);
+					RootedSeedlings.Add(Seedlings[0]);
 
-				FActorSpawnParameters SpawnParams;
-				SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-				auto* NewRootShape = Cast<AxRootShape>(GetWorld()->SpawnActor<AActor>(RootShapeClass, FVector(0,0,0), FRotator::ZeroRotator, SpawnParams));
-				NewRootShape->SetVertices(Positions);
+					FActorSpawnParameters SpawnParams;
+					SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+					auto* NewRootShape = Cast<AxRootShape>(GetWorld()->SpawnActor<AActor>(RootShapeClass, FVector(0,0,0), FRotator::ZeroRotator, SpawnParams));
+					NewRootShape->Init(InstigatorCharacter, RootedSeedlings);
+				}
+				else
+				{
+					LogOnScreen(this, L"Planted Seedling - No Planted Seedling in range.");
+				}
 			}
 			else if (Factoids.Num() == 1)
 			{
