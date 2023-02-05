@@ -54,4 +54,7 @@ protected:
 	//UxAttributeComponent* AttributeComp;
 
 	virtual void BeginPlay() override;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+	ACharacter* NextInSnake;
 };

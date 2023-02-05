@@ -13,17 +13,13 @@ void AxAIController::BeginPlay()
 	if (ensureMsgf(BehaviorTree, L"Behaviour Tree is nullptr!"))
 	{
 		RunBehaviorTree(BehaviorTree);
-	}
+	}	
+}
 
-	//TODO set movement targets for ai
-
-	APawn* MyPawn = UGameplayStatics::GetPlayerPawn(this, 0);
-
-	if (MyPawn)
+void AxAIController::SetTarget(AActor* Target)
+{
+	if (Target)
 	{
-		//GetBlackboardComponent()->SetValueAsVector("MoveToLocation", MyPawn->GetActorLocation());
-
-		GetBlackboardComponent()->SetValueAsObject("TargetActor", MyPawn);
+		GetBlackboardComponent()->SetValueAsObject("TargetActor", Target);
 	}
-
 }
