@@ -24,7 +24,10 @@ void UxActionComponent::BeginPlay()
 	{
 		for (TSubclassOf<UxAction> ActionClass : DefaultActions)
 		{
-			AddAction(GetOwner(), ActionClass);
+			if (ActionClass)
+			{
+				AddAction(GetOwner(), ActionClass);
+			}
 		}
 	}
 }

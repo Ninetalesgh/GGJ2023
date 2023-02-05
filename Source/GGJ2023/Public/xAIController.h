@@ -18,4 +18,9 @@ protected:
 	UBehaviorTree* BehaviorTree;
 
 	virtual void BeginPlay() override;
+
+public:
+
+	UFUNCTION()
+	void SetTarget(AActor* Target);
 };

@@ -11,7 +11,6 @@
 void UxAction::Initialize(UxActionComponent* NewActionComp)
 {
 	ActionComp = NewActionComp;
-	ActionAnimDelay = 0.0f;
 }
 
 void UxAction::StartAction_Implementation(AActor* InstigatorActor)

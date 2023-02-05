@@ -7,8 +7,9 @@
 #include "xSeedlingStateComponent.h"
 #include "xActionComponent.h"
 #include "xFactionComponent.h"
-
-#include "AIController.h"
+#include "xAIController.h"
+#include "BehaviorTree/BlackboardComponent.h"
+#include "Kismet/GameplayStatics.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Components/BillboardComponent.h"
 #include "Components/SkeletalMeshComponent.h"
@@ -48,7 +49,12 @@ ACharacter* AxAICharacter::GetNext()
 
 void AxAICharacter::SetNext(ACharacter* Next)
 {
+	NextInSnake = Next;
 
+	if (auto* AIC = Cast<AxAIController>(GetController()))
+	{
+		AIC->SetTarget(NextInSnake);
+	}
 }
 
 void AxAICharacter::SetPrevious(AxAICharacter* Previous)

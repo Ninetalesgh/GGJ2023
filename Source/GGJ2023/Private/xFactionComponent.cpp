@@ -2,6 +2,8 @@
 
 
 #include "xFactionComponent.h"
+#include "xAICharacter.h"
+#include "xCharacter.h"
 #include "Net/UnrealNetwork.h"
 #include "GameFramework/Actor.h"
 
@@ -10,6 +12,11 @@ UxFactionComponent::UxFactionComponent()
 	RepData.Faction = Faction_Unassigned;
 	RepData.Variation = FactionVariation_0;
 	SetIsReplicatedByDefault(true);
+}
+
+UxFactionComponent* UxFactionComponent::GetFactionComponentFromActor(AActor* FromActor)
+{
+	return FromActor ? Cast<UxFactionComponent>(FromActor->GetComponentByClass(UxFactionComponent::StaticClass())) : nullptr;
 }
 
 EFaction UxFactionComponent::GetFaction() const

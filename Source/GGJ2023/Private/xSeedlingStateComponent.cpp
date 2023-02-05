@@ -13,7 +13,7 @@ UxSeedlingStateComponent::UxSeedlingStateComponent()
 
 void UxSeedlingStateComponent::SetOwningPlayer(AxCharacter* NewOwner)
 {
-	if (ensure(GetOwner()->HasAuthority()))
+	if (GetOwner()->HasAuthority())
 	{
 		auto* PreviousOwner = OwningPlayer;
 		OwningPlayer = NewOwner;
@@ -21,6 +21,26 @@ void UxSeedlingStateComponent::SetOwningPlayer(AxCharacter* NewOwner)
 		{
 			OnRep_OwningPlayerChange(PreviousOwner);
 		}
+	}
+}
+
+AxCharacter* UxSeedlingStateComponent::GetOwningPlayer() const
+{
+	return OwningPlayer;
+}
+
+ESeedlingState UxSeedlingStateComponent::GetSeedlingState() const
+{
+	return State;
+}
+
+void UxSeedlingStateComponent::SetSeedlingState(ESeedlingState NewState)
+{
+	if (GetOwner()->HasAuthority())
+	{
+		auto PreviousState = State;
+		State = NewState;
+		OnSeedlingStateChanged.Broadcast(Cast<AxAICharacter>(GetOwner()), State, PreviousState);
 	}
 }
 

@@ -14,6 +14,7 @@ class AxAICharacter;
 class UEnvQuery;
 class UEnvQueryInstanceBlueprintWrapper;
 class UCurveFloat;
+class AxHexGridTile;
 
 UCLASS()
 class GGJ2023_API AxGameMode : public AGameModeBase
@@ -31,6 +32,15 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category="GGJ2023")
 	TArray<AxAICharacter*> GetAllSeedlingsOfFaction(EFaction Faction);
+
+	UFUNCTION(BlueprintCallable, Category = "GGJ2023")
+	TArray<AxAICharacter*> GetAllPlantedSeedlingsOfFaction(EFaction Faction);
+	
+	UFUNCTION(BlueprintCallable, Category = "GGJ2023")
+	TArray<AxAICharacter*> GetAllUprootedSeedlingsOfFaction(EFaction Faction);
+
+	UFUNCTION(BlueprintCallable, Category = "GGJ2023")
+	TArray<AxHexGridTile*> GetAllHexTilesOfFaction(EFaction Faction);
 
 	UPROPERTY(EditAnywhere, Category = "GGJ2023")
 	TSubclassOf<AActor> FollowerClass;
