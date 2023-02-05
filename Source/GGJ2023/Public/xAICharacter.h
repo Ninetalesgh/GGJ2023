@@ -34,6 +34,8 @@ public:
 	void SetPrevious(AxAICharacter* Previous);
 protected:
 
+
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Visuals")
 	UxCameraFacingFlipBookComponent* BodyComp;
 
