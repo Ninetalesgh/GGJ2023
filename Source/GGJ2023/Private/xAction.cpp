@@ -18,6 +18,11 @@ void UxAction::StartAction_Implementation(AActor* InstigatorActor)
 {
 	UE_LOG(LogTemp, Log, L"Started: %s", *GetNameSafe(this));
 	//LogOnScreen(this, FString::Printf(L"Started: %s", *ActionName.ToString()), FColor::Green);
+	
+	if (!InstigatorActor)
+	{
+		InstigatorActor = GetOwningComponent()->GetOwner();
+	}
 
 	GetOwningComponent()->ActiveGameplayTags.AppendTags(GrantsTags);
 	RepData = { true, InstigatorActor };
