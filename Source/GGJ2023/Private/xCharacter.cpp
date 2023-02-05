@@ -22,7 +22,7 @@ AxCharacter::AxCharacter()
 	InteractionComp = CreateDefaultSubobject<UxInteractionComponent>("InteractionComp");
 	
 	BodyComp->SetupAttachment(RootComponent);
-	RootRadius = 1000.0f;
+	RootRadius = 10000.0f;
 	bUseControllerRotationYaw = false;
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 }

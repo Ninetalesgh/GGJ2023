@@ -106,7 +106,10 @@ void AxRootShape::OnRep_SeedlingsChange(TArray<AxAICharacter*> OldSeedlings)
 		if (Seed)
 		{
 			auto* SeedlingStateComp = Cast<UxSeedlingStateComponent>(Seed->GetComponentByClass(UxSeedlingStateComponent::StaticClass()));
-			SeedlingStateComp->OnSeedlingStateChanged.RemoveDynamic(this, &AxRootShape::OnSeedlingStateChange);
+			if (SeedlingStateComp)
+			{
+				SeedlingStateComp->OnSeedlingStateChanged.RemoveDynamic(this, &AxRootShape::OnSeedlingStateChange);
+			}
 		}
 	}
 
@@ -115,7 +118,10 @@ void AxRootShape::OnRep_SeedlingsChange(TArray<AxAICharacter*> OldSeedlings)
 		if (Seed)
 		{
 			auto* SeedlingStateComp = Cast<UxSeedlingStateComponent>(Seed->GetComponentByClass(UxSeedlingStateComponent::StaticClass()));
-			SeedlingStateComp->OnSeedlingStateChanged.AddDynamic(this, &AxRootShape::OnSeedlingStateChange);
+			if (SeedlingStateComp)
+			{
+				SeedlingStateComp->OnSeedlingStateChanged.AddDynamic(this, &AxRootShape::OnSeedlingStateChange);
+			}
 		}
 	}
 
