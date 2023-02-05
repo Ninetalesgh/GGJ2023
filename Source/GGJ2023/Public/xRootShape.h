@@ -41,6 +41,7 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Replicated, Category = "Root Pattern")
 	AxCharacter* OwningPlayer;
+	
 	UFUNCTION()
 	void OnRep_SeedlingsChange(TArray<AxAICharacter*> OldSeedlings);
 
@@ -50,8 +51,6 @@ protected:
 	UFUNCTION()
 	void OnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
+	UFUNCTION()
 	void OnSeedlingStateChange(AxAICharacter* Seedling, ESeedlingState NewSeedlingState, ESeedlingState OldSeedlingState);
-
-
-
 };

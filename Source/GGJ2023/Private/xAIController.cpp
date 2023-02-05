@@ -18,8 +18,5 @@ void AxAIController::BeginPlay()
 
 void AxAIController::SetTarget(AActor* Target)
 {
-	if (Target)
-	{
-		GetBlackboardComponent()->SetValueAsObject("TargetActor", Target);
-	}
+	GetBlackboardComponent()->SetValueAsObject("TargetActor", Target);
 }
