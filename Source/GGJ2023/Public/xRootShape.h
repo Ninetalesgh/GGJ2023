@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "xFactionComponent.h"
 #include "xSeedlingStateComponent.h"
 #include "xRootShape.generated.h"
 
@@ -23,9 +24,13 @@ public:
 	UFUNCTION()
 	void Init(AxCharacter* ShapeOwner, TArray<AxAICharacter*> NewSeedlings);
 
+	UFUNCTION(BlueprintCallable)
+	EFaction GetFaction();
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
+	virtual void Tick(float DeltaSeconds) override;
 
 	UFUNCTION()
 	void InitCollision();
@@ -53,4 +58,6 @@ protected:
 
 	UFUNCTION()
 	void OnSeedlingStateChange(AxAICharacter* Seedling, ESeedlingState NewSeedlingState, ESeedlingState OldSeedlingState);
+
+	bool bHasTriggered;
 };

@@ -4,10 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "xPlayerState.h"
+#include "xFactionComponent.h"
 #include "xHexGridTile.generated.h"
 
-class UxFactionComponent;
 
 UCLASS()
 class GGJ2023_API AxHexGridTile : public AActor
@@ -27,5 +26,13 @@ protected:
 
 	virtual void BeginPlay() override;
 
+	UFUNCTION()
+		void OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+	UFUNCTION()
+		void OnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+
+	UFUNCTION(BlueprintCallable, Server, Reliable)
+	void ServerSetFaction(EFaction Faction);
 
 };

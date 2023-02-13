@@ -94,11 +94,11 @@ void UxInteractionComponent::FindBestSeedling()
 			if (SSC->GetSeedlingState() == SeedlingState_Planted)
 			{
 				FocusedActor = HitActor;
-				//DrawDebugSphere(GetWorld(), Hit.ImpactPoint, TraceRadius, 32, FColor::Green, false, 0.0f);
+				DrawDebugSphere(GetWorld(), Hit.ImpactPoint, TraceRadius, 32, FColor::Green, false, 0.0f);
 			}
 			else
 			{
-				//DrawDebugSphere(GetWorld(), Hit.ImpactPoint, TraceRadius, 32, FColor::Red, false, 0.0f);
+				DrawDebugSphere(GetWorld(), Hit.ImpactPoint, TraceRadius, 32, FColor::Red, false, 0.0f);
 			}
 		}
 	}

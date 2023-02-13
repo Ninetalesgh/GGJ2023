@@ -15,13 +15,17 @@
 
 AxRootShape::AxRootShape()
 {
+	PrimaryActorTick.bCanEverTick = true;
 	bIsInitialized = false;
-
+	bHasTriggered = false;
 	ProceduralMeshComp = CreateDefaultSubobject<UProceduralMeshComponent>("ProceduralMeshComp");
 	ProceduralMeshComp->bUseComplexAsSimpleCollision = false;
 	ProceduralMeshComp->SetCollisionProfileName(L"RootShape");
 	ProceduralMeshComp->SetCollisionResponseToAllChannels(ECR_Overlap);
 	ProceduralMeshComp->SetGenerateOverlapEvents(true);
+
+	ProceduralMeshComp->SetCollisionObjectType(ECC_Pawn);
+	ProceduralMeshComp->SetCollisionResponseToChannel(ECC_WorldDynamic,ECollisionResponse::ECR_Overlap);
 
 	SetReplicates(true);
 }
@@ -31,12 +35,18 @@ void AxRootShape::BeginPlay()
 	Super::BeginPlay();
 	ProceduralMeshComp->OnComponentBeginOverlap.AddDynamic(this, &AxRootShape::OnOverlapBegin);
 	ProceduralMeshComp->OnComponentEndOverlap.AddDynamic(this, &AxRootShape::OnOverlapEnd);
-
+	PrimaryActorTick.SetTickFunctionEnable(true);
 }
 
 void AxRootShape::OnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
 
+}
+
+EFaction AxRootShape::GetFaction()
+{
+	auto* OwnerFactionComp = UxFactionComponent::GetFactionComponentFromActor(OwningPlayer);
+	return OwnerFactionComp ? OwnerFactionComp->GetFaction() : Faction_Unassigned;
 }
 
 void AxRootShape::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
@@ -52,11 +62,25 @@ void AxRootShape::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActo
 
 			if (OtherFaction != OwnerFaction)
 			{
-				if (Cast<AxAICharacter>(OtherActor) || Cast<AxHexGridTile>(OtherActor))
+				if (Cast<AxHexGridTile>(OtherActor))
 				{
-				//	OtherFactionComp->SetFaction(OwnerFaction);
+					OtherFactionComp->SetFaction(OwnerFaction);
 				}
 			}
+		}
+	}
+}
+
+void AxRootShape::Tick(float DeltaSeconds)
+{
+	if (!bHasTriggered)
+	{
+		TArray<AActor*> Overlappers;
+		ProceduralMeshComp->GetOverlappingActors(Overlappers);
+		if (!Overlappers.IsEmpty())
+		{
+			//bHasTriggered = true;
+			//PrimaryActorTick.SetTickFunctionEnable(false);
 		}
 	}
 }
@@ -70,21 +94,23 @@ void AxRootShape::Init(AxCharacter* ShapeOwner, TArray<AxAICharacter*> NewSeedli
 		Seedlings = NewSeedlings;
 		OnRep_SeedlingsChange(Old);
 
-		auto* ShapeOwnerFC = UxFactionComponent::GetFactionComponentFromActor(ShapeOwner);
+		//auto* ShapeOwnerFC = UxFactionComponent::GetFactionComponentFromActor(ShapeOwner);
 
-		TSet<AActor*> OverlappingActors;
-		ProceduralMeshComp->GetOverlappingActors(OverlappingActors);
-		for (auto A : OverlappingActors)
-		{
-			if (Cast<AxHexGridTile>(A))
-			{
-				auto* FC = UxFactionComponent::GetFactionComponentFromActor(A);
-				if (FC)
-				{
-					FC->SetFaction(ShapeOwnerFC->GetFaction());
-				}
-			}
-		}
+		//TSet<AActor*> OverlappingActors;
+		//ProceduralMeshComp->GetOverlappingActors(OverlappingActors);
+		//for (auto A : OverlappingActors)
+		//{
+		//	if (Cast<AxHexGridTile>(A))
+		//	{
+		//		auto* FC = UxFactionComponent::GetFactionComponentFromActor(A);
+		//		if (FC)
+		//		{
+		//			FC->SetFaction(ShapeOwnerFC->GetFaction());
+		//		}
+		//	}
+		//}
+
+		InitCollision();
 	}
 }
 
@@ -140,8 +166,6 @@ void AxRootShape::OnRep_SeedlingsChange(TArray<AxAICharacter*> OldSeedlings)
 			}
 		}
 	}
-
-	InitCollision();
 }
 
 void AxRootShape::OnSeedlingStateChange(AxAICharacter* Seedling, ESeedlingState NewSeedlingState, ESeedlingState OldSeedlingState)

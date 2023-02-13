@@ -59,6 +59,8 @@ void UxAction_Plant::ActionDelay_Elapsed(AxCharacter* InstigatorCharacter)
 				NextSeedling->SetNext(nullptr);
 			}
 			
+			NextSeedling->SetActorLocation(InstigatorCharacter->GetActorLocation());
+
 			//Reorganize walking seedlings
 			InstigatorCharacter->MakeSnake();
 

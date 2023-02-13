@@ -7,7 +7,6 @@
 
 static void LogOnScreen(UObject* WorldContext, FString Msg, FColor Color = FColor::White, float Duration = 5.0f)
 {
-	return;
 	if (!ensure(WorldContext))
 	{
 		return;

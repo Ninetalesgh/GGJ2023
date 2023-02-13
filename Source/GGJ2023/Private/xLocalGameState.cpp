@@ -43,35 +43,29 @@ void AxLocalGameState::BeginPlay()
 
 	for (auto id : ConnectedDevices)
 	{
-		if (!HasAuthority())
+		LogOnScreen(this, FString::Printf(L"Connected Device -> ID: %d", id.GetId()), FColor::White);
+
+		ULocalPlayer* LocalPlayer = GetWorld()->GetGameInstance()->FindLocalPlayerFromPlatformUserId(FGenericPlatformMisc::GetPlatformUserForUserIndex(id.GetId()));
+
+		if (LocalPlayer == nullptr)
 		{
-			LogOnScreen(this, FString::Printf(L"Connected Device -> ID: %d", id.GetId()), FColor::White);
-
-			ULocalPlayer* LocalPlayer = GetWorld()->GetGameInstance()->FindLocalPlayerFromPlatformUserId(FGenericPlatformMisc::GetPlatformUserForUserIndex(id.GetId()));
-
-			if (LocalPlayer == nullptr)
-			{
-				APlayerController* NewPlayer = UGameplayStatics::CreatePlayer(this, id.GetId(), true);
-			}
+			APlayerController* NewPlayer = UGameplayStatics::CreatePlayer(this, id.GetId(), true);
 		}
 	}
 
 	InputDeviceChangedDelegate = IPlatformInputDeviceMapper::Get().GetOnInputDeviceConnectionChange().AddLambda([this](EInputDeviceConnectionState NewConnectionState, FPlatformUserId PlatformUserId, FInputDeviceId InputDeviceId)
 		{
-			if (!HasAuthority())
+			FString ConnectState = NewConnectionState == EInputDeviceConnectionState::Connected ? "Connected" :
+				NewConnectionState == EInputDeviceConnectionState::Disconnected ? "Disconnected" : "Invalid";
+
+			ULocalPlayer* LocalPlayer = GetWorld()->GetGameInstance()->FindLocalPlayerFromPlatformUserId(PlatformUserId);
+
+			if (LocalPlayer == nullptr)
 			{
-				FString ConnectState = NewConnectionState == EInputDeviceConnectionState::Connected ? "Connected" :
-					NewConnectionState == EInputDeviceConnectionState::Disconnected ? "Disconnected" : "Invalid";
-
-				ULocalPlayer* LocalPlayer = GetWorld()->GetGameInstance()->FindLocalPlayerFromPlatformUserId(PlatformUserId);
-
-				if (LocalPlayer == nullptr)
-				{
-					APlayerController* NewPlayer = UGameplayStatics::CreatePlayer(this, PlatformUserId.GetInternalId(), true);
-				}
-
-				LogOnScreen(this, FString::Printf(L"%s Device -> ID: %d", *ConnectState, InputDeviceId.GetId()), FColor::White);
+				APlayerController* NewPlayer = UGameplayStatics::CreatePlayer(this, PlatformUserId.GetInternalId(), true);
 			}
+
+			LogOnScreen(this, FString::Printf(L"%s Device -> ID: %d", *ConnectState, InputDeviceId.GetId()), FColor::White);	
 		});
 }
 

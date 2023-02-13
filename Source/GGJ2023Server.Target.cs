@@ -3,6 +3,7 @@
 using UnrealBuildTool;
 using System.Collections.Generic;
 
+[SupportedPlatforms(UnrealPlatformClass.Server)]
 public class GGJ2023ServerTarget : TargetRules
 {
 	public GGJ2023ServerTarget( TargetInfo Target) : base(Target)
